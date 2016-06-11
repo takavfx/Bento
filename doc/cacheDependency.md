@@ -1,7 +1,10 @@
 # Cache Dependency
 
 ## Demo
+
 <iframe src="https://vine.co/v/etgXVIPA7Yz/embed/simple" width="480" height="480" frameborder="0"></iframe><script src="https://platform.vine.co/static/scripts/embed.js"></script>
+
+[Sample - Vine](https://vine.co/v/etgXVIPA7Yz)
 
 ## Procedure
 

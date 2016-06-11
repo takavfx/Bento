@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shelfDocument>
+  <!-- This file contains definitions of shelves, toolbars, and tools.
+ It should not be hand-edited when it is being used by the application.
+ Note, that two definitions of the same element are not allowed in
+ a single file. -->
+
+  <toolshelf name="bento_shelf" label="Bento">
+    <memberTool name="cr_cacheDendency"/>
+  </toolshelf>
+
+  <tool name="cr_cacheDendency" label="cCDP" icon="SOP_file">
+    <script scriptType="python"><![CDATA[import cacheDependency
+reload(cacheDependency)
+
+cacheDependency.main()
+
+]]></script>
+  </tool>
+</shelfDocument>

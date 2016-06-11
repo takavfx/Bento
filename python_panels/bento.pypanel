@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pythonPanelDocument>
+  <!-- This file contains definitions of Python interfaces and the
+ interfaces menu.  It should not be hand-edited when it is being
+ used by the application.  Note, that two definitions of the
+ same interface or of the interfaces menu are not allowed
+ in a single file. -->
+  <interface name="cacheManager" label="Cache Manager" icon="MISC_python" help_url="">
+    <script><![CDATA[########################################################################
+# Replace the sample code below with your own to create a
+# PyQt or PySide interface.  Your code must define a 'createInterface()'
+# function that returns the root widget of your interface.
+########################################################################
+
+import sys
+sys.path.append('/Users/takanori/Dev/Dev_777_GitKraken/Bento/python')
+
+import CacheManager.cacheManager as CM
+reload(CM)
+
+def createInterface():
+    return CM.main()]]></script>
+    <help><![CDATA[]]></help>
+  </interface>
+</pythonPanelDocument>

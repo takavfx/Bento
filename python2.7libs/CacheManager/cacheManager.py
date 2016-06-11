@@ -16,13 +16,13 @@ from . import define as Define
 reload(Define)
 # from . import cacheTable
 # reload(cacheTable)
-import hqt.hqt as hqt
-reload(hqt)
+# import hqt.hqt as hqt
+# reload(hqt)
 
 sys.dont_write_bytecode = True
 
 
-class CacheManager(hqt.QWidget):
+class CacheManager(QtGui.QWidget):
     """docstring for CacheManager"""
 
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))

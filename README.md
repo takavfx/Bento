@@ -5,6 +5,11 @@ Bento
 Bento is a toolset for houdini.
 
 ## Feature
+
+### Shelf tool
+
+![alt tag](doc/img/ss_shelf_tool_0001.png)
+
 * [Cache Dependency](doc/cacheDependency.md)
 
 ## Install

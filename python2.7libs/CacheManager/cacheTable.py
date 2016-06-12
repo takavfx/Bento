@@ -1,14 +1,20 @@
+# -*- coding: utf-8 -*-
+#-------------------------------------------------------------------------------
+## Description
+"""
+Construct Cache Table with PySide.GtGui.
+"""
+#-------------------------------------------------------------------------------
 
-import hou
 import sys, os
 
 from PySide import QtCore, QtGui
 
-from . import hqt
-from . import utils as Utils
 from . import define as Define
 
 sys.dont_write_bytecode = True
+
+CURRENT_PATH = os.path.driname(__file__)
 
 class cacheTableView(QtGui.QTreeView):
     """docstring for cacheTableView"""
@@ -31,36 +37,6 @@ class cacheTableView(QtGui.QTreeView):
         # self.setAlternatingRowColors(True)
         self.model = CacheTableModel()
         self.setModel(self.model)
-
-    def getCacheList(self):
-        current_cache_nodes = []
-
-        nodes = hou.pwd().allSubChildren()
-
-        for node in nodes:
-            if node.type().name().lower() in Define._CACHE_NODES:
-
-                eachNode_dict = {}
-
-                nodeName = node.name()
-                nodePath = node.path()
-                cachePath = self.unexpStrPath(nodePath)
-                envName = self.env_Analysis(cachePath)
-                cacheExpandedPath = node.evalParm("file")
-                nodeTypeName = node.type().name().lower()
-                nodeColor = node.color().rgb()
-
-                eachNode_dict["Name"] = nodeName
-                eachNode_dict["Node Path"] = nodePath
-                eachNode_dict["Cache Path"] = cachePath
-                eachNode_dict["Env"] = envName
-                eachNode_dict["Expanded Path"] = cacheExpandedPath
-                eachNode_dict["Colour"] = nodeColor
-
-                current_cache_nodes.append(eachNode_dict)
-
-        return current_cache_nodes
-
 
 
     def unexpStrPath(self, path):

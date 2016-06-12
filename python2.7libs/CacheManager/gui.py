@@ -14,7 +14,7 @@ from PySide import QtUiTools
 
 from . import define as Define
 reload(Define)
-# from . import cacheTable
+# from . import cacheTable as CacheTable
 # reload(cacheTable)
 # import hqt.hqt as hqt
 # reload(hqt)
@@ -38,7 +38,6 @@ class CacheManager(QtGui.QWidget):
         ui_file.open(QtCore.QFile.ReadOnly)
         self.UI = loader.load(ui_file)
 
-
         layout = QtGui.QVBoxLayout()
         layout.addWidget(self.UI)
         self.setLayout(layout)
@@ -53,6 +52,9 @@ class CacheManager(QtGui.QWidget):
 
     def setSignals(self):
         pass
+
+    # def _createCacheTable(self):
+    #     CacheTable()
 
 
 def main():

@@ -4,6 +4,9 @@ Bento
 ## Description
 Bento is a toolset for houdini.
 
+## Feature
+* [Cache Dependency](doc/cacheDependency.md)
+
 ## Install
 1. Clone or Download this repository to your place you want to download.
 2. Place this repository to houdini-accessible place.

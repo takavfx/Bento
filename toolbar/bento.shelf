@@ -7,6 +7,7 @@
 
   <toolshelf name="bento_shelf" label="Bento">
     <memberTool name="cr_cacheDendency"/>
+    <memberTool name="create_dlp"/>
   </toolshelf>
 
   <tool name="cr_cacheDendency" label="cCDP" icon="SOP_file">
@@ -16,5 +17,12 @@ reload(cacheDependency)
 cacheDependency.main()
 
 ]]></script>
+  </tool>
+
+  <tool name="create_dlp" label="cDLP" icon="OBJ_geo">
+    <script scriptType="python"><![CDATA[import createDlp
+reload(createDlp)
+
+createDlp.main()]]></script>
   </tool>
 </shelfDocument>

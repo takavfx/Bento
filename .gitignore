@@ -1,0 +1,34 @@
+# Ignore all files by default, but scan all directories
+*
+!*/
+
+
+# Script files
+!*.bat
+!*.sh
+!*.pl
+!*.py
+!*.cmd
+
+# Text files
+!*.txt
+!*.md
+
+# Specific Houdini Files
+!*.hip
+!*.otl
+!*.hda
+
+# Other configuration and markup files
+!*.ini
+
+# Specific names
+!README
+!AUTHORS
+!LICENSE
+!FAQ
+!VERSION
+!ChangeLog
+
+# Ignore Specific File Types
+*.pyc

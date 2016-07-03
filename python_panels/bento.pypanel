@@ -10,7 +10,7 @@
 reload(CM)
 
 def createInterface():
-    return CM.main()]]></script>
+    return CM.main(launch_type="python_panel")]]></script>
     <help><![CDATA[]]></help>
   </interface>
 </pythonPanelDocument>

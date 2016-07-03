@@ -14,20 +14,21 @@ from . import define as Define
 reload(Define)
 
 #-------------------------------------------------------------------------------
-# Houdini data management Class
+# Houdini data management class
 #-------------------------------------------------------------------------------
 class houManager(object):
+
+    ALL_NODES = hou.pwd().allSubChildren()
+
     """docstring for houManager"""
     def __init__(self):
         super(houManager, self).__init__()
 
 
-    def getCacheList(self, all_nodes = []):
+    def getCacheList(self):
 
-        all_nodes = hou.pwd().allSubChildren()
-
-        for node in all_nodes:
-            if node.type().name().lower() in Define._CACHE_NODES:
+        for node in self.ALL_NODES:
+            if node.type().name().lower() in Define.CACHE_NODES:
 
                 eachNode_dict = {}
 
@@ -49,6 +50,7 @@ class houManager(object):
                 current_cache_nodes.append(eachNode_dict)
 
         return current_cache_nodes
+
 
 #-------------------------------------------------------------------------------
 # OS file management class

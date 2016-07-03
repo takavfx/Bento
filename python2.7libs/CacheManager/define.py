@@ -10,7 +10,7 @@ Define file for Cache Manager Tool.
 CACHE_NODES = [
     "file",
     "filecache"
-    # "alembic",
+    "alembic",
     # "alembicarchive"
 ]
 
@@ -24,12 +24,13 @@ ENV_TYPE = [
 
 # Define Header Items
 HEADER_ITEMS = [
-    { "key": "name", "title": "Name", "width": 100, "visible": True },
-    { "key": "node_path", "title": "Node Path", "width": 200, "visible": True},
-    { "key": "cache_path", "title": "Cache Path", "width": 200, "visible": True },
-    { "key": "env", "title": "Env", "width": 50, "visible": True},
-    { "key": "expanded_path", "title":"Expanded path", "width": 200, "visible": False},
-    { "key": "color", "title": "Color", "width": None, "visible": False}
+    { "key": "name",           "display": "Name",           "width": 100,  "visible": False},
+    { "key": "node_path",      "display": "Node Path",      "width": 200,  "visible": True},
+    { "key": "cache_path",     "display": "Cache Path",     "width": 200,  "visible": True},
+    { "key": "srcStatus",      "display": "Status",         "width": 200,  "visible": True},
+    { "key": "env",            "display": "Env",            "width": 50,   "visible": False},
+    { "key": "expanded_path",  "display": "Expanded path",  "width": 200,  "visible": False},
+    { "key": "color",          "display": "Color",          "width": None, "visible": False}
 ]
 
 # Menu Items

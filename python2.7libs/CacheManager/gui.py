@@ -15,8 +15,8 @@ from PySide import QtUiTools
 
 from . import define as Define
 reload(Define)
-# from . import cacheTable as CacheTable
-# reload(cacheTable)
+# from . import cacheWidget as CacheWidget
+# reload(CacheWidget)
 # import hqt.hqt as hqt
 # reload(hqt)
 

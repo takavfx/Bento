@@ -32,3 +32,4 @@
 
 # Ignore Specific File Types
 *.pyc
+*.DS_Store

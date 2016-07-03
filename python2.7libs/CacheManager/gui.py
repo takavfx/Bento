@@ -7,6 +7,7 @@ Managing cache tool.
 #-------------------------------------------------------------------------------
 
 import os, sys
+sys.dont_write_bytecode = True
 import hou
 
 from PySide import QtCore, QtGui
@@ -18,8 +19,6 @@ reload(Define)
 # reload(cacheTable)
 # import hqt.hqt as hqt
 # reload(hqt)
-
-sys.dont_write_bytecode = True
 
 
 class CacheManager(QtGui.QWidget):
@@ -57,5 +56,10 @@ class CacheManager(QtGui.QWidget):
     #     CacheTable()
 
 
-def main():
-    return CacheManager()
+def main(launch_type=""):
+    if launch_type == "python_panel"
+        return CacheManager()
+
+#-------------------------------------------------------------------------------
+# EOF
+#-------------------------------------------------------------------------------

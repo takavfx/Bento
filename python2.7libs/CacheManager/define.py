@@ -7,7 +7,7 @@ Define file for Cache Manager Tool.
 #-------------------------------------------------------------------------------
 
 # Define Cache Nodes to deal with this script
-_CACHE_NODES = [
+CACHE_NODES = [
     "file",
     "filecache"
     # "alembic",
@@ -16,14 +16,14 @@ _CACHE_NODES = [
 
 
 # Define Houdini Environment Varialbes. This will also be used for displaying.
-_ENV_TYPE = [
+ENV_TYPE = [
     '-',
     'HIP',
     'JOB'
 ]
 
 # Define Header Items
-_HEADER_ITEMS = [
+HEADER_ITEMS = [
     { "key": "name", "title": "Name", "width": 100, "visible": True },
     { "key": "node_path", "title": "Node Path", "width": 200, "visible": True},
     { "key": "cache_path", "title": "Cache Path", "width": 200, "visible": True },
@@ -33,5 +33,9 @@ _HEADER_ITEMS = [
 ]
 
 # Menu Items
-_MENU_HELP = "Help"
-_MENU_RELOAD = "Reload"
+MENU_HELP = "Help"
+MENU_RELOAD = "Reload"
+
+#-------------------------------------------------------------------------------
+# EOF
+#-------------------------------------------------------------------------------

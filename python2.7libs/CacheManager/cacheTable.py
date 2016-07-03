@@ -6,20 +6,22 @@ Construct Cache Table with PySide.GtGui.
 """
 #-------------------------------------------------------------------------------
 
-import sys, os
+import os, sys
+sys.dont_write_bytecode = True
 
 from PySide import QtCore, QtGui
 
 from . import define as Define
+reload(Define)
 
-sys.dont_write_bytecode = True
 
 CURRENT_PATH = os.path.driname(__file__)
 
-# Original Roles
-FILE_PATH = QtCore.Qt.UserRole
 
-class cacheTableView(QtGui.QTreeView):
+#-------------------------------------------------------------------------------
+# QTreeWidget for displaying Cache List
+#-------------------------------------------------------------------------------
+class cacheTreeWidget(QtGui.QTreeWidget):
     """docstring for cacheTableView"""
 
     mouseReleased = QtCore.Signal(QtCore.QPoint)
@@ -54,8 +56,13 @@ class cacheTableView(QtGui.QTreeView):
         else:
             return pathParts[0]
 
+#-------------------------------------------------------------------------------
+# QTreeWidget for displaying Cache List
+#-------------------------------------------------------------------------------
 class CacheTableDelegate(QtGui.QStyledItemDelegate):
     """docstring for CacheTableModel"""
+
+    HEADER_SETTING = Define.
 
     def __init__(self, parent=None):
         super(CacheTableDelegate, self).__init__(parent)
@@ -68,3 +75,9 @@ class CacheTableDelegate(QtGui.QStyledItemDelegate):
 
         name = index.data(QtCore.Qt.BackgroundRole)
         description = index.data(DESCRIPTION_ROLE)
+
+
+
+#-------------------------------------------------------------------------------
+# EOF
+#-------------------------------------------------------------------------------

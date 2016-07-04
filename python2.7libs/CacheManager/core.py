@@ -52,6 +52,18 @@ class houManager(object):
         return current_cache_nodes
 
 
+    def unexpStrPath(self, path):
+        cachePath = path + "/file"
+        unExpPath = hou.parm(cachePath).unexpandedString()
+        return unExpPath
+
+    def env_Analysis(self, path):
+        pathParts = path[0].split('/')
+        if pathParts[0] == None:
+            return "-"
+        else:
+            return pathParts[0]
+
 #-------------------------------------------------------------------------------
 # OS file management class
 #-------------------------------------------------------------------------------

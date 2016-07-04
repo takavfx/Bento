@@ -27,54 +27,96 @@ class cacheTreeWidget(QtGui.QTreeWidget):
     mouseReleased = QtCore.Signal(QtCore.QPoint)
     keyPressed = QtCore.Signal(QtGui.QKeyEvent)
 
+    HEADER_SETTING = Define.HEADER_ITEMS
+
     def __init__(self, parent):
         super(cacheTableView, self).__init__(parent)
         self._parent = parent
         self.cache_nodes = self.getCacheList()
         self.initSettings()
 
-    def initSettings(self):
-        # self.verticalHeader().setVisible(False)
-        # self.verticalHeader().setMovable(True)
-        # self.horizontalHeader().setResizeMode(QtGui.QHeaderView.Interactive)
-        # self.setSortingEnabled(True)
-        # self.setHorizontalScrollMode(QtGui.QAbstractItemView.ScrollPerPixel)
-        # self.setAlternatingRowColors(True)
-        self.model = CacheTableModel()
-        self.setModel(self.model)
+
+    def _initUI(self):
+
+        self.setColumnCount(len(self.HEADER_SETTING))
+        self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+        headerLabels = usefuls.makeListByDictKey("display", self.HEADER_SETTING, "")
+        self.setHeaderLabels(headerLabels)
+        self.setSortingEnabled(True)
+        self._setHeaderWidth()
+        self._setHeaderVisible()
+        self.itemChanged.connect(self.checkItemEvent)
+        self.customContextMenuRequested.connect(self.showCellMenu)
 
 
-    def unexpStrPath(self, path):
-        cachePath = path + "/file"
-        unExpPath = hou.parm(cachePath).unexpandedString()
-        return unExpPath
+    def _setHeaderWidth(self):
 
-    def env_Analysis(self, path):
-        pathParts = path[0].split('/')
-        if pathParts[0] == None:
-            return "-"
-        else:
-            return pathParts[0]
+        for i, setting in enumerate(self.HEADER_SETTING):
+            width = setting.get("width")
+
+            if width is not None:
+                self.setColumnWidth(i, width)
+
+
+    def _setHeaderVisible(self):
+
+        for i, setting in enumerate(self.HEADER_SETTING):
+            visible = setting.get("visible")
+
+            if visible is False:
+                self.hideColumn(i)
+
+
+    def section(self, key):
+        for i, setting in enumerate(self.HEADER_SETTING):
+
+            if setting.get("key") == key:
+                return i
+
+        raise RuntimeError("No %s key found in table setting." % key)
+
+
+    def showCellMenu(self, pos):
+        pass
+
+
+    def setData(self, nodes, category = None, uncheckAll = False):
+
+        self.blockSignals(True)
+        self.clear()
+        self._categoryType = category
+
+        for nodes, layerObjects in nodes.iteritems():
+
+            if isinstance(nodes, tuple):
+                itemName = "%s%s" % nodes
+
+            elif isinstance(nodes, (str, unicode)):
+                itemName = "%s" % nodes
+
+            else:
+                itemName = ""
 
 #-------------------------------------------------------------------------------
 # QTreeWidget for displaying Cache List
 #-------------------------------------------------------------------------------
-class CacheTableDelegate(QtGui.QStyledItemDelegate):
-    """docstring for CacheTableModel"""
-
-    HEADER_SETTING = Define.
-
-    def __init__(self, parent=None):
-        super(CacheTableDelegate, self).__init__(parent)
-
-    def paint(self):
-        selected = False
-
-        if option.state & QtGui.QStyle.State_Selected:
-            selected = True
-
-        name = index.data(QtCore.Qt.BackgroundRole)
-        description = index.data(DESCRIPTION_ROLE)
+# class CacheTableDelegate(QtGui.QStyledItemDelegate):
+#     """docstring for CacheTableModel"""
+#
+#     HEADER_SETTING = Define.
+#
+#     def __init__(self, parent=None):
+#         super(CacheTableDelegate, self).__init__(parent)
+#
+#
+#     def paint(self):
+#         selected = False
+#
+#         if option.state & QtGui.QStyle.State_Selected:
+#             selected = True
+#
+#         name = index.data(QtCore.Qt.BackgroundRole)
+#         description = index.data(DESCRIPTION_ROLE)
 
 
 

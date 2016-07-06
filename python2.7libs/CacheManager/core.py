@@ -27,6 +27,8 @@ class houManager(object):
 
     def getCacheList(self):
 
+        current_cache_nodes = []
+
         for node in self.ALL_NODES:
             if node.type().name().lower() in Define.CACHE_NODES:
 
@@ -35,7 +37,7 @@ class houManager(object):
                 nodeName          = node.name()
                 nodePath          = node.path()
                 cachePath         = self.unexpStrPath(nodePath)
-                envName           = self.env_Analysis(cachePath)
+                envName           = self.analizeEnv(cachePath)
                 cacheExpandedPath = node.evalParm("file")
                 nodeTypeName      = node.type().name().lower()
                 nodeColor         = node.color().rgb()
@@ -52,17 +54,24 @@ class houManager(object):
         return current_cache_nodes
 
 
-    def unexpStrPath(self, path):
+    def makeListFromPath(self, path=""):
+        path_hierarchy = []
+        path_hierarchy = path.split("/")
+        return path_hierarchy
+
+
+    def unexpStrPath(self, path=""):
         cachePath = path + "/file"
         unExpPath = hou.parm(cachePath).unexpandedString()
         return unExpPath
 
-    def env_Analysis(self, path):
+    def analizeEnv(self, path=""):
         pathParts = path[0].split('/')
         if pathParts[0] == None:
             return "-"
         else:
             return pathParts[0]
+
 
 #-------------------------------------------------------------------------------
 # OS file management class
@@ -84,8 +93,24 @@ class fileManager(object):
     def copyDir(self, dir, remove = False):
         pass
 
+
     def fileCheck(self, filepath):
         pass
+
+
+
+#-------------------------------------------------------------------------------
+# Other useful methods
+#-------------------------------------------------------------------------------
+
+def makeListByDictKey(key, listOfDict, default = None):
+    res = []
+    for d in listOfDict:
+        if d.has_key(key):
+            res.append(d[key])
+        else:
+            res.append(default)
+    return res
 
 
 #-------------------------------------------------------------------------------

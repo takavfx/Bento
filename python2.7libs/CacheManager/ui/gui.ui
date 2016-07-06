@@ -26,6 +26,18 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>5</number>
+   </property>
+   <property name="topMargin">
+    <number>5</number>
+   </property>
+   <property name="rightMargin">
+    <number>5</number>
+   </property>
+   <property name="bottomMargin">
+    <number>5</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <property name="topMargin">
@@ -55,6 +67,22 @@
         <string/>
        </property>
       </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>5</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_4">
@@ -122,7 +150,29 @@
     </layout>
    </item>
    <item>
-    <widget class="QTreeView" name="treeView"/>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <property name="tabsClosable">
+      <bool>false</bool>
+     </property>
+     <widget class="QWidget" name="cacheTreeTab">
+      <attribute name="title">
+       <string>CacheTree</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="settingsTab">
+      <attribute name="title">
+       <string>Settings</string>
+      </attribute>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>

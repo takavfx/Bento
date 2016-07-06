@@ -13,10 +13,10 @@ import hou
 from PySide import QtCore, QtGui
 from PySide import QtUiTools
 
-from . import define as Define
+import define as Define
 reload(Define)
-# from . import cacheWidget as CacheWidget
-# reload(CacheWidget)
+import cacheWidget as CacheWidget
+reload(CacheWidget)
 # import hqt.hqt as hqt
 # reload(hqt)
 
@@ -37,6 +37,10 @@ class CacheManager(QtGui.QWidget):
         ui_file.open(QtCore.QFile.ReadOnly)
         self.UI = loader.load(ui_file)
 
+        cacheTreeWidget = self._createCacheTree()
+        treeWidgetLayout = self.UI.verticalLayout_3
+        treeWidgetLayout.addWidget(cacheTreeWidget)
+
         layout = QtGui.QVBoxLayout()
         layout.addWidget(self.UI)
         self.setLayout(layout)
@@ -52,12 +56,15 @@ class CacheManager(QtGui.QWidget):
     def setSignals(self):
         pass
 
+    def _createCacheTree(self):
+        return CacheWidget.cacheTreeWidget()
+
     # def _createCacheTable(self):
     #     CacheTable()
 
 
 def main(launch_type=""):
-    if launch_type == "python_panel"
+    if launch_type == "python_panel":
         return CacheManager()
 
 #-------------------------------------------------------------------------------

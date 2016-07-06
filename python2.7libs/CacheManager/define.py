@@ -25,9 +25,9 @@ ENV_TYPE = [
 # Define Header Items
 HEADER_ITEMS = [
     { "key": "name",           "display": "Name",           "width": 100,  "visible": False},
-    { "key": "node_path",      "display": "Node Path",      "width": 200,  "visible": True},
-    { "key": "cache_path",     "display": "Cache Path",     "width": 200,  "visible": True},
-    { "key": "srcStatus",      "display": "Status",         "width": 200,  "visible": True},
+    { "key": "node",           "display": "Node",           "width": 200,  "visible": True},
+    { "key": "cache_path",     "display": "Cache Path",     "width": 500,  "visible": True},
+    { "key": "srcStatus",      "display": "Status",         "width": 50,  "visible": True},
     { "key": "env",            "display": "Env",            "width": 50,   "visible": False},
     { "key": "expanded_path",  "display": "Expanded path",  "width": 200,  "visible": False},
     { "key": "color",          "display": "Color",          "width": None, "visible": False}

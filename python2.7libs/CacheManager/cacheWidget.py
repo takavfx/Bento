@@ -11,11 +11,13 @@ sys.dont_write_bytecode = True
 
 from PySide import QtCore, QtGui
 
-from . import define as Define
+import core
+reload(core)
+import define as Define
 reload(Define)
 
 
-CURRENT_PATH = os.path.driname(__file__)
+# CURRENT_PATH = os.path.driname(__file__)
 
 
 #-------------------------------------------------------------------------------
@@ -29,24 +31,24 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
     HEADER_SETTING = Define.HEADER_ITEMS
 
-    def __init__(self, parent):
-        super(cacheTableView, self).__init__(parent)
+    def __init__(self, parent=None):
+        super(cacheTreeWidget, self).__init__()
         self._parent = parent
-        self.cache_nodes = self.getCacheList()
-        self.initSettings()
+        self.cache_nodes = core.houManager().getCacheList()
+        self._initSettings()
 
 
-    def _initUI(self):
+    def _initSettings(self):
 
         self.setColumnCount(len(self.HEADER_SETTING))
         self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
-        headerLabels = usefuls.makeListByDictKey("display", self.HEADER_SETTING, "")
+        headerLabels = core.makeListByDictKey("display", self.HEADER_SETTING, "")
         self.setHeaderLabels(headerLabels)
         self.setSortingEnabled(True)
         self._setHeaderWidth()
         self._setHeaderVisible()
-        self.itemChanged.connect(self.checkItemEvent)
-        self.customContextMenuRequested.connect(self.showCellMenu)
+        # self.itemChanged.connect(self.checkItemEvent)
+        # self.customContextMenuRequested.connect(self.showCellMenu)
 
 
     def _setHeaderWidth(self):
@@ -66,36 +68,45 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             if visible is False:
                 self.hideColumn(i)
 
-
-    def section(self, key):
-        for i, setting in enumerate(self.HEADER_SETTING):
-
-            if setting.get("key") == key:
-                return i
-
-        raise RuntimeError("No %s key found in table setting." % key)
+    def _makeHeaderLabels(self):
+        header_list = []
+        for item in self.HEADER_ITEMS:
+            if item:
+                header_list.append(item)
+        return header_list
 
 
-    def showCellMenu(self, pos):
-        pass
+    # def section(self, key):
+    #     for i, setting in enumerate(self.HEADER_SETTING):
+    #
+    #         if setting.get("key") == key:
+    #             return i
+    #
+    #     raise RuntimeError("No %s key found in table setting." % key)
 
 
-    def setData(self, nodes, category = None, uncheckAll = False):
+    # def showCellMenu(self, pos):
+    #     pass
 
-        self.blockSignals(True)
-        self.clear()
-        self._categoryType = category
 
-        for nodes, layerObjects in nodes.iteritems():
-
-            if isinstance(nodes, tuple):
-                itemName = "%s%s" % nodes
-
-            elif isinstance(nodes, (str, unicode)):
-                itemName = "%s" % nodes
-
-            else:
-                itemName = ""
+    # def setData(self, nodes, category = None, uncheckAll = False):
+    #
+    #     self.blockSignals(True)
+    #     self.clear()
+    #     self._categoryType = category
+    #
+    #     for nodes, layerObjects in nodes.iteritems():
+    #
+    #         if isinstance(nodes, tuple):
+    #             itemName = "%s%s" % nodes
+    #
+    #         elif isinstance(nodes, (str, unicode)):
+    #             itemName = "%s" % nodes
+    #
+    #         else:
+    #             itemName = ""
+    #
+    #         topItem = QtGui.QTreeWidgetItem("")
 
 #-------------------------------------------------------------------------------
 # QTreeWidget for displaying Cache List

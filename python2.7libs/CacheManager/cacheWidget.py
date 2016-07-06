@@ -76,13 +76,13 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         return header_list
 
 
-    # def section(self, key):
-    #     for i, setting in enumerate(self.HEADER_SETTING):
-    #
-    #         if setting.get("key") == key:
-    #             return i
-    #
-    #     raise RuntimeError("No %s key found in table setting." % key)
+    def section(self, key):
+        for i, setting in enumerate(self.HEADER_SETTING):
+
+            if setting.get("key") == key:
+                return i
+
+        raise RuntimeError("No %s key found in table setting." % key)
 
 
     # def showCellMenu(self, pos):

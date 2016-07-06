@@ -15,56 +15,81 @@ from PySide import QtUiTools
 
 import define as Define
 reload(Define)
-import cacheWidget as CacheWidget
+import cacheWidget
 reload(CacheWidget)
-# import hqt.hqt as hqt
-# reload(hqt)
+
+try:
+    import hqt.hqt as hqt
+    reload(hqt)
+except:
+    pass
 
 
 class CacheManager(QtGui.QWidget):
     """docstring for CacheManager"""
 
+
     CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     UIPATH = CURRENT_DIR + "/ui/gui.ui"
 
+
     def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self)
+        super(CacheManager, self).__init__()
 
         self.UI = None
 
-        loader = QtUiTools.QUiLoader()
-        ui_file = QtCore.QFile(self.UIPATH)
-        ui_file.open(QtCore.QFile.ReadOnly)
-        self.UI = loader.load(ui_file)
-
-        cacheTreeWidget = self._createCacheTree()
-        treeWidgetLayout = self.UI.verticalLayout_3
-        treeWidgetLayout.addWidget(cacheTreeWidget)
-
-        layout = QtGui.QVBoxLayout()
-        layout.addWidget(self.UI)
-        self.setLayout(layout)
+        self.initSettings()
 
 
     def initSettings(self):
         self.initGUI()
         self.setSignals()
 
+
     def initGUI(self):
-        pass
+
+        loader = QtUiTools.QUiLoader()
+        ui_file = QtCore.QFile(self.UIPATH)
+        ui_file.open(QtCore.QFile.ReadOnly)
+        self.UI = loader.load(ui_file)
+
+        self.cacheTreeWidget = self._createCacheTree()
+        treeWidgetLayout = self.UI.treeWidgetLayout
+        treeWidgetLayout.addWidget(self.cacheTreeWidget)
+
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(self.UI)
+        self.setLayout(layout)
+
 
     def setSignals(self):
-        pass
+
+        self.UI.applyChangesButton.clicked.connect(self._applyChnagesButtonClicked)
+        self.UI.reloadButton.clicked.connect(self._reloadButtonClicked)
+        self.UI.testButton.clicked.connect(self._testButtonClicked)
+
 
     def _createCacheTree(self):
-        return CacheWidget.cacheTreeWidget()
+        return cacheWidget.cacheTreeWidget()
 
-    # def _createCacheTable(self):
-    #     CacheTable()
+
+    def _applyChnagesButtonClicked(self):
+        pass
+
+
+    def _reloadButtonClicked(self):
+        pass
+
+
+    def _testButtonClicked(self):
+        pass
+
 
 
 def main(launch_type=""):
-    if launch_type == "python_panel":
+    try:
+        return hqt.showUi(CacheManager())
+    except:
         return CacheManager()
 
 #-------------------------------------------------------------------------------

@@ -10,7 +10,7 @@
 reload(CM)
 
 def createInterface():
-    return CM.main(launch_type="python_panel")]]></script>
+    return CM.CacheManager()]]></script>
     <help><![CDATA[]]></help>
   </interface>
 </pythonPanelDocument>

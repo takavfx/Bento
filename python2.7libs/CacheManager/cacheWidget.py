@@ -33,10 +33,11 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
     def __init__(self, parent=None):
         super(cacheTreeWidget, self).__init__()
-        self._parent = parent
         self.cache_nodes = core.houManager().getCacheList()
         self._initSettings()
+        self.childItems = []
 
+        self._makeLevelList()
 
     def _initSettings(self):
 
@@ -92,57 +93,63 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
 
 
-    def setData(self, nodes, category = None, uncheckAll = False):
+    def setData(self, shotData, category = None, uncheckAll = False):
 
-        self.blockSignals(True)
-        self.clear()
-        self._categoryType = category
+        for node in self.cache_nodes:
+            path = node.get("node_path")
 
-        topItem = QtGui.QTreeWidgetItem([""]*len(self.HEADER_SETTING))
-        topItem.setText(self.section("name"), itemName)
-
-        # for i, node in enumerate(self.cache_nodes):
-        #
-        #     for n, path in enumerate(node.get("node_path")):
+            for n, level in path:
+                self.childItem(level)
 
 
 
-        # for nodes, layerObjects in nodes.iteritems():
-        #
-        #     if isinstance(nodes, tuple):
-        #         itemName = "%s%s" % nodes
-        #
-        #     elif isinstance(nodes, (str, unicode)):
-        #         itemName = "%s" % nodes
-        #
-        #     else:
-        #         itemName = ""
-        #
-        #     topItem = QtGui.QTreeWidgetItem("")
+    def _makeLevelList(self):
+
+        root = TreeItem(["title", "cache_path"], parent = None)
+
+        for cache_node in self.cache_nodes:
+            node_paths = cache_node.get("node_path")
+
+            for path in node_paths:
+                level = root.appendChild(path)
+
 
 #-------------------------------------------------------------------------------
 # QTreeWidget for displaying Cache List
 #-------------------------------------------------------------------------------
-# class CacheTableDelegate(QtGui.QStyledItemDelegate):
-#     """docstring for CacheTableModel"""
-#
-#     HEADER_SETTING = Define.
-#
-#     def __init__(self, parent=None):
-#         super(CacheTableDelegate, self).__init__(parent)
-#
-#
-#     def paint(self):
-#         selected = False
-#
-#         if option.state & QtGui.QStyle.State_Selected:
-#             selected = True
-#
-#         name = index.data(QtCore.Qt.BackgroundRole)
-#         description = index.data(DESCRIPTION_ROLE)
+class TreeItem(object):
+    def __init__(self, data, parent=None):
+        self.parentItem = parent
+        self.itemData = data
+        self.childItems = []
 
+    def appendChild(self, item):
+        self.childItems.append(item)
 
+    def child(self, row):
+        return self.childItems[row]
 
+    def childCount(self):
+        return len(self.childItems)
+
+    def columnCount(self):
+        return len(self.itemData)
+
+    def data(self, column):
+        try:
+            return self.itemData[column]
+        except IndexError:
+            return None
+
+    def parent(self):
+        return self.parentItem
+
+    def row(self):
+        if self.parentItem:
+            return self.parentItem.childItems.index(self)
+        return 0
+
+        
 #-------------------------------------------------------------------------------
 # EOF
 #-------------------------------------------------------------------------------

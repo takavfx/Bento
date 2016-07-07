@@ -18,7 +18,7 @@ reload(core)
 import define as Define
 reload(Define)
 import cacheWidget
-reload(CacheWidget)
+reload(cacheWidget)
 
 try:
     import hqt.hqt as hqt
@@ -72,7 +72,18 @@ class CacheManager(QtGui.QWidget):
 
 
     def _createCacheTree(self):
-        return cacheWidget.cacheTreeWidget()
+        # return cacheWidget.cacheTreeWidget()
+
+        treeWidget = QtGui.QTreeWidget()
+        treeWidget.setColumnCount(3)
+        treeWidget.setColumnWidth(1, 200)
+        treeWidget.setHeaderLabels(['Node', 'Cache Path', 'Status']);
+
+        item0 = QtGui.QTreeWidgetItem(treeWidget, ['Node 0', '', ''])
+        item00 = QtGui.QTreeWidgetItem(item0, ['Node 00', u'F:/', ''] )
+        item01 = QtGui.QTreeWidgetItem(item0, ['Node 01', u'F:/', 'None'])
+
+        return treeWidget
 
 
     def _applyChnagesButtonClicked(self):
@@ -84,7 +95,7 @@ class CacheManager(QtGui.QWidget):
 
 
     def _testButtonClicked(self):
-        print core.houManager.getCacheList()
+        print core.houManager().getCacheList()
 
 
 

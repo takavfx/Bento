@@ -86,27 +86,39 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
 
     # def showCellMenu(self, pos):
-    #     pass
+    #
+    #     cellMenu = QtGui.QMenu(self)
+    #     currentItem = self.itemAt(pos.x(), pos.y())
 
 
-    # def setData(self, nodes, category = None, uncheckAll = False):
-    #
-    #     self.blockSignals(True)
-    #     self.clear()
-    #     self._categoryType = category
-    #
-    #     for nodes, layerObjects in nodes.iteritems():
-    #
-    #         if isinstance(nodes, tuple):
-    #             itemName = "%s%s" % nodes
-    #
-    #         elif isinstance(nodes, (str, unicode)):
-    #             itemName = "%s" % nodes
-    #
-    #         else:
-    #             itemName = ""
-    #
-    #         topItem = QtGui.QTreeWidgetItem("")
+
+    def setData(self, nodes, category = None, uncheckAll = False):
+
+        self.blockSignals(True)
+        self.clear()
+        self._categoryType = category
+
+        topItem = QtGui.QTreeWidgetItem([""]*len(self.HEADER_SETTING))
+        topItem.setText(self.section("name"), itemName)
+
+        # for i, node in enumerate(self.cache_nodes):
+        #
+        #     for n, path in enumerate(node.get("node_path")):
+
+
+
+        # for nodes, layerObjects in nodes.iteritems():
+        #
+        #     if isinstance(nodes, tuple):
+        #         itemName = "%s%s" % nodes
+        #
+        #     elif isinstance(nodes, (str, unicode)):
+        #         itemName = "%s" % nodes
+        #
+        #     else:
+        #         itemName = ""
+        #
+        #     topItem = QtGui.QTreeWidgetItem("")
 
 #-------------------------------------------------------------------------------
 # QTreeWidget for displaying Cache List

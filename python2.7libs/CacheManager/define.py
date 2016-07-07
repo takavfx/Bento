@@ -33,6 +33,7 @@ HEADER_ITEMS = [
     { "key": "color",          "display": "Color",          "width": None, "visible": False}
 ]
 
+
 # Menu Items
 MENU_HELP = "Help"
 MENU_RELOAD = "Reload"

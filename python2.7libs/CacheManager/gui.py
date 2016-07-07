@@ -13,6 +13,8 @@ import hou
 from PySide import QtCore, QtGui
 from PySide import QtUiTools
 
+import core
+reload(core)
 import define as Define
 reload(Define)
 import cacheWidget
@@ -82,7 +84,7 @@ class CacheManager(QtGui.QWidget):
 
 
     def _testButtonClicked(self):
-        pass
+        print core.houManager.getCacheList()
 
 
 

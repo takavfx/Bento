@@ -32,22 +32,16 @@ class houManager(object):
         for node in self.ALL_NODES:
             if node.type().name().lower() in Define.CACHE_NODES:
 
-                eachNode_dict = {}
+                eachNode_dict     = {}
+                node_path         = node.path()
+                cachePath         = self.unexpStrPath(node_path)
 
-                nodeName          = node.name()
-                nodePath          = node.path()
-                cachePath         = self.unexpStrPath(nodePath)
-                envName           = self.analizeEnv(cachePath)
-                cacheExpandedPath = node.evalParm("file")
-                nodeTypeName      = node.type().name().lower()
-                nodeColor         = node.color().rgb()
-
-                eachNode_dict["Name"]           = nodeName
-                eachNode_dict["Node Path"]      = nodePath
-                eachNode_dict["Cache Path"]     = cachePath
-                eachNode_dict["Env"]            = envName
-                eachNode_dict["Expanded Path"]  = cacheExpandedPath
-                eachNode_dict["Colour"]         = nodeColor
+                eachNode_dict["name"]           = node.name()
+                eachNode_dict["node_path"]      = self.makeListFromPath(node_path)
+                eachNode_dict["cache_path"]     = self.unexpStrPath(node_path)
+                eachNode_dict["env"]            = self.analizeEnv(cachePath)
+                eachNode_dict["expanded_path"]  = node.evalParm("file")
+                eachNode_dict["color"]         = node.color().rgb()
 
                 current_cache_nodes.append(eachNode_dict)
 
@@ -104,6 +98,7 @@ class fileManager(object):
 #-------------------------------------------------------------------------------
 
 def makeListByDictKey(key, listOfDict, default = None):
+
     res = []
     for d in listOfDict:
         if d.has_key(key):

@@ -26,7 +26,7 @@ class houManager(object):
 
 
     def getCacheList(self):
-
+        ## Init variable
         current_cache_nodes = []
 
         for node in self.ALL_NODES:
@@ -46,11 +46,21 @@ class houManager(object):
                 current_cache_nodes.append(eachNode_dict)
 
         return current_cache_nodes
-        
+
+
+    def makeLevelTree(self, lst):
+
+        for cache_node in lst:
+            node_paths = cache_node.get("node_path")
+
+            for path in node_paths:
+                level = root.appendChild(path)
+
 
     def makeListFromPath(self, path=""):
         path_hierarchy = []
         path_hierarchy = path.split("/")
+        path_hierarchy.pop(0)
         return path_hierarchy
 
 
@@ -58,6 +68,7 @@ class houManager(object):
         cachePath = path + "/file"
         unExpPath = hou.parm(cachePath).unexpandedString()
         return unExpPath
+
 
     def analizeEnv(self, path=""):
         pathParts = path[0].split('/')

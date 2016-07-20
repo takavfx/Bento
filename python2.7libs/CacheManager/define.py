@@ -23,7 +23,7 @@ ENV_TYPE = [
 ]
 
 # Define Header Items
-HEADER_ITEMS = [
+CACHE_ITEMS = [
     { "key": "name",           "display": "Name",           "width": 100,  "visible": False},
     { "key": "node",           "display": "Node",           "width": 200,  "visible": True},
     { "key": "cache_path",     "display": "Cache Path",     "width": 500,  "visible": True},

@@ -2,7 +2,7 @@
 #-------------------------------------------------------------------------------
 ## Description
 """
-Construct Cache Table with PySide.GtGui.
+Construct Cache Table widget with PySide.GtGui.
 """
 #-------------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
     mouseReleased = QtCore.Signal(QtCore.QPoint)
     keyPressed = QtCore.Signal(QtGui.QKeyEvent)
 
-    HEADER_SETTING = Define.HEADER_ITEMS
+    HEADER_SETTING = Define.CACHE_ITEMS
 
     def __init__(self, parent=None):
         super(cacheTreeWidget, self).__init__()
@@ -37,7 +37,8 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         self._initSettings()
         self.childItems = []
 
-        self._makeLevelList()
+        # self._makeLevelList()
+
 
     def _initSettings(self):
 
@@ -103,15 +104,46 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
 
 
-    def _makeLevelList(self):
-
-        root = TreeItem(["title", "cache_path"], parent = None)
+    def _make_level(self, widget):
 
         for cache_node in self.cache_nodes:
             node_paths = cache_node.get("node_path")
 
             for path in node_paths:
                 level = root.appendChild(path)
+
+
+    def _makeLevelTreeStructure(lst):
+
+        items = []
+        while len(lst):
+            (k,v,n) = lst.pop(0)
+            item = QTreeWidgetItem(QStringList(QString(str(k))))
+            item.setData(0,Qt.UserRole,v)
+            items.append(item)
+            if n is not None:
+                items[-1].addChildren( make_tree(n) )
+
+        return items
+
+
+
+    lst = [("0",0,None),
+           ("1",1,
+            [
+                ("1-0",10,None),
+                ("1-1",11,None),
+                ("1-2",12,
+                 [
+                        ("1-2-0",120,None),
+                        ("1-2-1",121,None)
+                        ]
+                 ),
+                ("1-3",13,None)
+                ]
+            ),
+           ["2",2,None]]
+
 
 
 #-------------------------------------------------------------------------------
@@ -149,7 +181,14 @@ class TreeItem(object):
             return self.parentItem.childItems.index(self)
         return 0
 
-        
+
+class CacheItemModel(QtCore.QAbstractItemModel):
+    """docstring for CacheItemModel"""
+    def __init__(self, node_path, parent=None):
+        super(CacheItemModel, self).__init__()
+        self.arg = arg
+
+
 #-------------------------------------------------------------------------------
 # EOF
 #-------------------------------------------------------------------------------

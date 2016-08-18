@@ -9,7 +9,12 @@ Construct Cache Table widget with PySide.GtGui.
 import os, sys
 sys.dont_write_bytecode = True
 
+import os
+import platform
+from functools import partial
 from PySide import QtCore, QtGui
+
+import hou
 
 import core
 reload(core)
@@ -29,8 +34,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
     mouseReleased = QtCore.Signal(QtCore.QPoint)
     keyPressed = QtCore.Signal(QtGui.QKeyEvent)
 
-    # HEADER_SETTING = Define.CACHE_ITEMS
-
     HEADER_SETTING = [
         { "key": "node",           "display": "Node",           "width": 200,  "visible": True},
         { "key": "cache_path",     "display": "Cache Path",     "width": 500,  "visible": True},
@@ -40,18 +43,19 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         { "key": "color",          "display": "Color",          "width": None, "visible": False}
     ]
 
+
     def __init__(self, parent=None):
         super(cacheTreeWidget, self).__init__()
-        self._cache_nodes = core.houManager().getCacheList()
+        self._cache_nodes = core.houManager.getCacheList()
         self._initUI()
-        self.childItems = []
-
+        delegate = StatusDelegate(self)
+        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
     def _initUI(self):
 
         self.setColumnCount(len(self.HEADER_SETTING))
         self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
-        headerLabels = core.makeListByDictKey("display", self.HEADER_SETTING, "")
+        headerLabels = self.makeListByDictKey("display", self.HEADER_SETTING, "")
         self.setHeaderLabels(headerLabels)
         self.setSortingEnabled(True)
         self._setHeaderWidth()
@@ -59,6 +63,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         self.setData()
         # self.itemChanged.connect(self.checkItemEvent)
         self.customContextMenuRequested.connect(self.showCellMenu)
+
 
     def _setHeaderWidth(self):
 
@@ -76,6 +81,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
             if visible is False:
                 self.hideColumn(i)
+
 
     def _makeHeaderLabels(self):
         header_list = []
@@ -106,6 +112,18 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         if currentItem is None:
             return
 
+        ## Replace Cache File
+        actionOpenSrcFolder = QtGui.QAction("Replace Cache File", self)
+        actionOpenSrcFolder.triggered.connect(partial(self.replaceCacheFile, currentItem))
+
+        actionOpenSrcFolder.setEnabled(False)
+        if currentItem.childCount() == 0:
+            actionOpenSrcFolder.setEnabled(True)
+
+        cellMenu.addAction(actionOpenSrcFolder)
+
+        cellMenu.addSeparator()
+
         actionExpandAll = QtGui.QAction("Expand all", self)
         actionExpandAll.triggered.connect(self.expandAll)
         cellMenu.addAction(actionExpandAll)
@@ -114,21 +132,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         actionCollapseAll.triggered.connect(self.collapseAll)
         cellMenu.addAction(actionCollapseAll)
 
-        cellMenu.addSeparator()
-
-        actionOpenSrcFolder = QtGui.QAction("Open source folder in explorer", self)
-        actionOpenSrcFolder.triggered.connect(partial(self.openSrcFolderEvent, currentItem))
-
-        if currentItem.parent() is None:
-            actionOpenSrcFolder.setEnabled(False)
-
-        cellMenu.addAction(actionOpenSrcFolder)
-
-        if self._treeType == self.ERROR_TYPE:
-            actionOpenSrcFolder.setDisabled(True)
-
-        cellMenu.addAction(actionOpenSrcFolder)
-
         cellMenu.exec_(self.mapToGlobal(QtCore.QPoint(pos.x(), pos.y() + self.header().height())))
 
 
@@ -136,6 +139,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         self.blockSignals(True)
         self.clear()
+        self._cacheIDs = []
 
         #-----------------------------------------------------------------------
         # make tree from path
@@ -157,11 +161,13 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                 topItem = QtGui.QTreeWidgetItem(rootItem, [topToken])
 
             if len(pathTokens) > 0:
-                self._addChildItem(topItem, pathTokens, cache_path)
+                self._addChildItem(topItem, pathTokens, path, cache_path)
 
+        self.sortItems(self.section("node"), QtCore.Qt.AscendingOrder)
         self.expandAll()
         self.blockSignals(False)
         self._setHeaderWidth()
+
 
     def _findChild(self, item, nodeName):
 
@@ -173,7 +179,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         return None
 
 
-    def _addChildItem(self, parentItem, restTokens, cachePathItem):
+    def _addChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem):
         try:
             nextToken = restTokens.pop(0)
 
@@ -186,33 +192,75 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             childItem = QtGui.QTreeWidgetItem(parentItem, [nextToken])
 
         if len(restTokens) > 0:
-            self._addChildItem(childItem, restTokens, cachePathItem)
+            self._addChildItem(childItem, restTokens, nodePathItem, cachePathItem)
         else:
             endItem = childItem
             endItem.setText(self.section("cache_path"), cachePathItem)
 
+            ## Make pare endItem with node path
+            each = {}
+            each["nodePath"] = nodePathItem
+            each["endItem"]  = endItem
+            self._cacheIDs.append(each)
 
-    def openSrcFolderEvent(self, treeItem):
-        """Slot called when open source folder menu was clicked.
 
-        :param treeItem: <QtGui.QTreeWidgetItem> tree item clicked.
-        """
+    def dirButtonClicked(self, treeItem):
+        currentDir = treeItem.text(self.section("cache_path"))
+        while currentDir and not os.path.exists(currentDir):
+            currentDir = os.path.dirname(currentDir)
 
-        if not hasattr(treeItem, "itemData"):
-            return
+        if os.path.exists(currentDir):
+            os.chdir(currentDir)
 
-        dirMan = treeItem.itemData
-        self.openExplorer(dirMan.srcPath)
+        dir = QtGui.QFileDialog.getExistingDirectory(self, caption='Set Dir', dir=currentDir)
 
+        if dir:
+            treeItem.setText(dir)
+
+
+    def replaceCacheFile(self, treeItem):
+        currentPath = treeItem.text(self.section("cache_path"))
+        currentDir = os.path.dirname(currentPath)
+        if os.path.exists(currentDir):
+            file = hou.ui.selectFile(
+                    start_directory = currentDir,
+                    title           = "Replace Cache File",
+                    default_value   = os.path.basename(currentPath)
+                )
+
+            if not file == "":
+                treeItem.setText(self.section("cache_path"),file)
+
+        else:
+            file = hou.ui.selectFile(
+                    title = "Replace Cache File"
+                )
+
+            if not file == "":
+                treeItem.setText(self.section("cache_path"),file)
+
+
+    def makeListByDictKey(self, key, listOfDict, default = None):
+
+        res = []
+        for d in listOfDict:
+            if d.has_key(key):
+                res.append(d[key])
+            else:
+                res.append(default)
+        return res
 
 
 class StatusDelegate(QtGui.QStyledItemDelegate):
-
-    SELECTED_BG_COLOR = QtGui.QColor.fromRgb(120, 135, 155)
-    UNSELECTED_BG_COLOR = QtGui.QColor.fromRgb(32, 31, 31)
+    """docstring for StatusDelegate"""
     def __init__(self, parent):
         super(StatusDelegate, self).__init__(parent)
         self._parent = parent
+
+
+
+
+
 
 #-------------------------------------------------------------------------------
 # EOF

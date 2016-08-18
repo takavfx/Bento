@@ -29,18 +29,25 @@ class cacheTreeWidget(QtGui.QTreeWidget):
     mouseReleased = QtCore.Signal(QtCore.QPoint)
     keyPressed = QtCore.Signal(QtGui.QKeyEvent)
 
-    HEADER_SETTING = Define.CACHE_ITEMS
+    # HEADER_SETTING = Define.CACHE_ITEMS
+
+    HEADER_SETTING = [
+        { "key": "node",           "display": "Node",           "width": 200,  "visible": True},
+        { "key": "cache_path",     "display": "Cache Path",     "width": 500,  "visible": True},
+        { "key": "srcStatus",      "display": "Status",         "width": 50,  "visible": False},
+        { "key": "env",            "display": "Env",            "width": 50,   "visible": False},
+        { "key": "expanded_path",  "display": "Expanded path",  "width": 200,  "visible": False},
+        { "key": "color",          "display": "Color",          "width": None, "visible": False}
+    ]
 
     def __init__(self, parent=None):
         super(cacheTreeWidget, self).__init__()
-        self.cache_nodes = core.houManager().getCacheList()
-        self._initSettings()
+        self._cache_nodes = core.houManager().getCacheList()
+        self._initUI()
         self.childItems = []
 
-        # self._makeLevelList()
 
-
-    def _initSettings(self):
+    def _initUI(self):
 
         self.setColumnCount(len(self.HEADER_SETTING))
         self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
@@ -49,9 +56,9 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         self.setSortingEnabled(True)
         self._setHeaderWidth()
         self._setHeaderVisible()
+        self.setData()
         # self.itemChanged.connect(self.checkItemEvent)
-        # self.customContextMenuRequested.connect(self.showCellMenu)
-
+        self.customContextMenuRequested.connect(self.showCellMenu)
 
     def _setHeaderWidth(self):
 
@@ -87,107 +94,125 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         raise RuntimeError("No %s key found in table setting." % key)
 
 
-    # def showCellMenu(self, pos):
-    #
-    #     cellMenu = QtGui.QMenu(self)
-    #     currentItem = self.itemAt(pos.x(), pos.y())
+    def showCellMenu(self, pos):
+        """Create menu for right click on the tree widget and show.
+
+        :param pos: <QtCore.QPoint> mouse click position.
+        """
+
+        cellMenu = QtGui.QMenu(self)
+        currentItem = self.itemAt(pos.x(), pos.y())
+
+        if currentItem is None:
+            return
+
+        actionExpandAll = QtGui.QAction("Expand all", self)
+        actionExpandAll.triggered.connect(self.expandAll)
+        cellMenu.addAction(actionExpandAll)
+
+        actionCollapseAll = QtGui.QAction("Collapse all", self)
+        actionCollapseAll.triggered.connect(self.collapseAll)
+        cellMenu.addAction(actionCollapseAll)
+
+        cellMenu.addSeparator()
+
+        actionOpenSrcFolder = QtGui.QAction("Open source folder in explorer", self)
+        actionOpenSrcFolder.triggered.connect(partial(self.openSrcFolderEvent, currentItem))
+
+        if currentItem.parent() is None:
+            actionOpenSrcFolder.setEnabled(False)
+
+        cellMenu.addAction(actionOpenSrcFolder)
+
+        if self._treeType == self.ERROR_TYPE:
+            actionOpenSrcFolder.setDisabled(True)
+
+        cellMenu.addAction(actionOpenSrcFolder)
+
+        cellMenu.exec_(self.mapToGlobal(QtCore.QPoint(pos.x(), pos.y() + self.header().height())))
 
 
+    def setData(self):
 
-    def setData(self, shotData, category = None, uncheckAll = False):
+        self.blockSignals(True)
+        self.clear()
 
-        for node in self.cache_nodes:
+        #-----------------------------------------------------------------------
+        # make tree from path
+        #-----------------------------------------------------------------------
+        for node in self._cache_nodes:
             path = node.get("node_path")
+            cache_path = node.get("cache_path")
+            pathTokens = path.split("/")
+            pathTokens.pop(0)
 
-            for n, level in path:
-                self.childItem(level)
+            if len(pathTokens)==0:
+        		continue
 
+            topToken = pathTokens.pop(0)
+            rootItem = self.invisibleRootItem()
+            topItem = self._findChild(rootItem, topToken)
 
+            if topItem is None:
+                topItem = QtGui.QTreeWidgetItem(rootItem, [topToken])
 
-    def _make_level(self, widget):
+            if len(pathTokens) > 0:
+                self._addChildItem(topItem, pathTokens, cache_path)
 
-        for cache_node in self.cache_nodes:
-            node_paths = cache_node.get("node_path")
+        self.expandAll()
+        self.blockSignals(False)
+        self._setHeaderWidth()
 
-            for path in node_paths:
-                level = root.appendChild(path)
+    def _findChild(self, item, nodeName):
 
+        for idx in range(item.childCount()):
+            childItem = item.child(idx)
+            if nodeName == childItem.text(0):
+                return childItem
 
-    def _makeLevelTreeStructure(lst):
-
-        items = []
-        while len(lst):
-            (k,v,n) = lst.pop(0)
-            item = QTreeWidgetItem(QStringList(QString(str(k))))
-            item.setData(0,Qt.UserRole,v)
-            items.append(item)
-            if n is not None:
-                items[-1].addChildren( make_tree(n) )
-
-        return items
-
-
-
-    lst = [("0",0,None),
-           ("1",1,
-            [
-                ("1-0",10,None),
-                ("1-1",11,None),
-                ("1-2",12,
-                 [
-                        ("1-2-0",120,None),
-                        ("1-2-1",121,None)
-                        ]
-                 ),
-                ("1-3",13,None)
-                ]
-            ),
-           ["2",2,None]]
+        return None
 
 
-
-#-------------------------------------------------------------------------------
-# QTreeWidget for displaying Cache List
-#-------------------------------------------------------------------------------
-class TreeItem(object):
-    def __init__(self, data, parent=None):
-        self.parentItem = parent
-        self.itemData = data
-        self.childItems = []
-
-    def appendChild(self, item):
-        self.childItems.append(item)
-
-    def child(self, row):
-        return self.childItems[row]
-
-    def childCount(self):
-        return len(self.childItems)
-
-    def columnCount(self):
-        return len(self.itemData)
-
-    def data(self, column):
+    def _addChildItem(self, parentItem, restTokens, cachePathItem):
         try:
-            return self.itemData[column]
+            nextToken = restTokens.pop(0)
+
         except IndexError:
-            return None
+            return childItem
 
-    def parent(self):
-        return self.parentItem
+        childItem = self._findChild(parentItem, nextToken)
 
-    def row(self):
-        if self.parentItem:
-            return self.parentItem.childItems.index(self)
-        return 0
+        if childItem is None:
+            childItem = QtGui.QTreeWidgetItem(parentItem, [nextToken])
+
+        if len(restTokens) > 0:
+            self._addChildItem(childItem, restTokens, cachePathItem)
+        else:
+            endItem = childItem
+            endItem.setText(self.section("cache_path"), cachePathItem)
 
 
-class CacheItemModel(QtCore.QAbstractItemModel):
-    """docstring for CacheItemModel"""
-    def __init__(self, node_path, parent=None):
-        super(CacheItemModel, self).__init__()
-        self.arg = arg
+    def openSrcFolderEvent(self, treeItem):
+        """Slot called when open source folder menu was clicked.
 
+        :param treeItem: <QtGui.QTreeWidgetItem> tree item clicked.
+        """
+
+        if not hasattr(treeItem, "itemData"):
+            return
+
+        dirMan = treeItem.itemData
+        self.openExplorer(dirMan.srcPath)
+
+
+
+class StatusDelegate(QtGui.QStyledItemDelegate):
+
+    SELECTED_BG_COLOR = QtGui.QColor.fromRgb(120, 135, 155)
+    UNSELECTED_BG_COLOR = QtGui.QColor.fromRgb(32, 31, 31)
+    def __init__(self, parent):
+        super(StatusDelegate, self).__init__(parent)
+        self._parent = parent
 
 #-------------------------------------------------------------------------------
 # EOF

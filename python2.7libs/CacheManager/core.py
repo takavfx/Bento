@@ -18,8 +18,6 @@ reload(Define)
 #-------------------------------------------------------------------------------
 class houManager(object):
 
-    ALL_NODES = hou.pwd().allSubChildren()
-
     """docstring for houManager"""
     def __init__(self):
         super(houManager, self).__init__()
@@ -28,8 +26,9 @@ class houManager(object):
     def getCacheList(self):
         ## Init variable
         current_cache_nodes = []
+        all_nodes = hou.pwd().allSubChildren()
 
-        for node in self.ALL_NODES:
+        for node in all_nodes:
             if node.type().name().lower() in Define.CACHE_NODES:
 
                 eachNode_dict     = {}
@@ -37,7 +36,7 @@ class houManager(object):
                 cachePath         = self.unexpStrPath(node_path)
 
                 eachNode_dict["name"]           = node.name()
-                eachNode_dict["node_path"]      = self.makeListFromPath(node_path)
+                eachNode_dict["node_path"]      = node.path()
                 eachNode_dict["cache_path"]     = self.unexpStrPath(node_path)
                 eachNode_dict["env"]            = self.analizeEnv(cachePath)
                 eachNode_dict["expanded_path"]  = node.evalParm("file")
@@ -46,15 +45,6 @@ class houManager(object):
                 current_cache_nodes.append(eachNode_dict)
 
         return current_cache_nodes
-
-
-    def makeLevelTree(self, lst):
-
-        for cache_node in lst:
-            node_paths = cache_node.get("node_path")
-
-            for path in node_paths:
-                level = root.appendChild(path)
 
 
     def makeListFromPath(self, path=""):

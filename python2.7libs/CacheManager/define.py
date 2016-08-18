@@ -9,9 +9,9 @@ Define file for Cache Manager Tool.
 # Define Cache Nodes to deal with this script
 CACHE_NODES = [
     "file",
-    "filecache"
+    "filecache",
     "alembic",
-    # "alembicarchive"
+    "alembicarchive"
 ]
 
 

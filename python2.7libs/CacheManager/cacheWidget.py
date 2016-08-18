@@ -161,7 +161,8 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                 topItem = QtGui.QTreeWidgetItem(rootItem, [topToken])
 
             if len(pathTokens) > 0:
-                self._addChildItem(topItem, pathTokens, path, cache_path)
+                self._setChildItem(topItem, pathTokens, path, cache_path)
+
 
         self.sortItems(self.section("node"), QtCore.Qt.AscendingOrder)
         self.expandAll()
@@ -179,7 +180,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         return None
 
 
-    def _addChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem):
+    def _setChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem):
         try:
             nextToken = restTokens.pop(0)
 
@@ -192,7 +193,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             childItem = QtGui.QTreeWidgetItem(parentItem, [nextToken])
 
         if len(restTokens) > 0:
-            self._addChildItem(childItem, restTokens, nodePathItem, cachePathItem)
+            self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem)
         else:
             endItem = childItem
             endItem.setText(self.section("cache_path"), cachePathItem)

@@ -47,13 +47,6 @@ class houManager(object):
         return current_cache_nodes
 
 
-    def makeListFromPath(self, path=""):
-        path_hierarchy = []
-        path_hierarchy = path.split("/")
-        path_hierarchy.pop(0)
-        return path_hierarchy
-
-
     def unexpStrPath(self, path=""):
         cachePath = path + "/file"
         unExpPath = hou.parm(cachePath).unexpandedString()

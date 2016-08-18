@@ -17,12 +17,12 @@ reload(Define)
 # Houdini data management class
 #-------------------------------------------------------------------------------
 class houManager(object):
-
-    """docstring for houManager"""
+    """Core API to access to Houdini Datas
+    """
     def __init__(self):
         super(houManager, self).__init__()
 
-
+    @classmethod
     def getCacheList(self):
         ## Init variable
         current_cache_nodes = []
@@ -36,7 +36,7 @@ class houManager(object):
                 cachePath         = self.unexpStrPath(node_path)
 
                 eachNode_dict["name"]           = node.name()
-                eachNode_dict["node_path"]      = node.path()
+                eachNode_dict["node_path"]      = node_path
                 eachNode_dict["cache_path"]     = self.unexpStrPath(node_path)
                 eachNode_dict["env"]            = self.analizeEnv(cachePath)
                 eachNode_dict["expanded_path"]  = node.evalParm("file")
@@ -47,12 +47,14 @@ class houManager(object):
         return current_cache_nodes
 
 
+    @classmethod
     def unexpStrPath(self, path=""):
         cachePath = path + "/file"
         unExpPath = hou.parm(cachePath).unexpandedString()
         return unExpPath
 
 
+    @classmethod
     def analizeEnv(self, path=""):
         pathParts = path[0].split('/')
         if pathParts[0] == None:

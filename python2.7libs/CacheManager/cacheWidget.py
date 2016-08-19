@@ -6,7 +6,7 @@ Construct Cache Table widget with PySide.GtGui.
 """
 #-------------------------------------------------------------------------------
 
-import os, sys
+import sys
 sys.dont_write_bytecode = True
 
 import os
@@ -51,6 +51,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         delegate = StatusDelegate(self)
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
+        self.tree_items = {}
 
     def _initUI(self):
 
@@ -115,10 +116,10 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         ## Replace Cache File
         actionOpenSrcFolder = QtGui.QAction("Replace Cache File", self)
-        actionOpenSrcFolder.triggered.connect(partial(self.replaceCacheFile, currentItem))
+        actionOpenSrcFolder.triggered.connect(partial(self._replaceCacheFile, currentItem))
 
         actionOpenSrcFolder.setEnabled(False)
-        if currentItem.childCount() == 0:
+        if self._hasCacheImport(currentItem):
             actionOpenSrcFolder.setEnabled(True)
 
         cellMenu.addAction(actionOpenSrcFolder)
@@ -127,7 +128,11 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         ## Forcus selected item
         actionOpenSrcFolder = QtGui.QAction("Focus this node", self)
-        actionOpenSrcFolder.triggered.connect(partial(self.focusThisNode, currentItem))
+        actionOpenSrcFolder.triggered.connect(partial(self._focusThisNode, currentItem))
+
+        actionOpenSrcFolder.setEnabled(False)
+        if self._hasCacheImport(currentItem):
+            actionOpenSrcFolder.setEnabled(True)
 
         cellMenu.addAction(actionOpenSrcFolder)
 
@@ -173,7 +178,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             if len(pathTokens) > 0:
                 self._setChildItem(topItem, pathTokens, path, cache_path)
 
-        print self._nodeIDs
 
         self.sortItems(self.section("node"), QtCore.Qt.AscendingOrder)
         self.expandAll()
@@ -215,8 +219,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             each["endItem"]  = endItem
             self._nodeIDs.append(each)
 
-
-    def dirButtonClicked(self, treeItem):
+    def _dirButtonClicked(self, treeItem):
         currentDir = treeItem.text(self.section("cache_path"))
         while currentDir and not os.path.exists(currentDir):
             currentDir = os.path.dirname(currentDir)
@@ -230,7 +233,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             treeItem.setText(dir)
 
 
-    def replaceCacheFile(self, treeItem):
+    def _replaceCacheFile(self, treeItem):
         currentPath = treeItem.text(self.section("cache_path"))
         currentDir = os.path.dirname(currentPath)
         if os.path.exists(currentDir):
@@ -252,9 +255,8 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                 treeItem.setText(self.section("cache_path"),file)
 
 
-    def focusThisNode(self, treeItem):
+    def _focusThisNode(self, treeItem):
         for nodeid in self._nodeIDs:
-
             endItem = nodeid.get("endItem")
 
             if treeItem is endItem:
@@ -262,6 +264,13 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                 if node_path:
                     hou.node(node_path).setCurrent(on=True, clear_all_selected=True)
 
+
+    def _hasCacheImport(self, treeItem):
+        for nodeid in self._nodeIDs:
+            endItem = nodeid.get("endItem")
+
+            if treeItem is endItem:
+                return True
 
     def makeListByDictKey(self, key, listOfDict, default = None):
 
@@ -279,10 +288,6 @@ class StatusDelegate(QtGui.QStyledItemDelegate):
     def __init__(self, parent):
         super(StatusDelegate, self).__init__(parent)
         self._parent = parent
-
-
-
-
 
 
 #-------------------------------------------------------------------------------

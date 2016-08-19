@@ -44,12 +44,13 @@ class houManager(object):
                 eachNode_dict["env"]            = self.analizeEnv(cachePath)
                 eachNode_dict["expanded_path"]  = evalCachePath
                 eachNode_dict["color"]          = node.color().rgb()
-                eachNode_dict["editable"]       = True
+                eachNode_dict["editable"]       = isEditable(node_path)
 
                 current_cache_nodes.append(eachNode_dict)
 
+        for each in current_cache_nodes:
+            print each
         return current_cache_nodes
-
 
     @classmethod
     def unexpStrPath(self, path, opType):
@@ -66,7 +67,6 @@ class houManager(object):
         except:
             return None
 
-
     @classmethod
     def evalStrPath(self, node, opType):
 
@@ -81,7 +81,6 @@ class houManager(object):
         except:
             return None
 
-
     @classmethod
     def analizeEnv(self, path):
         pathParts = path[0].split('/')
@@ -90,26 +89,30 @@ class houManager(object):
         else:
             return pathParts[0]
 
-
     @classmethod
-    def isEditableNode(self, path):
+    def isEditable(self, path):
+        pathTokens = path.split('/').pop(0)
         try:
-            node = hou.node(path)
+            pathTokens.pop(-1)
 
         except IndexError:
             return None
 
-        if node.type().name.lower() in Define.CHILDNODES_EXCEPTION:
-            pathTokens = path.split('/')
+        node_path = "/" + "/".join(nextToken)
+        node = hou.node(node_path)
 
-            for idx in len(pathTokens):
-                pathTokens.pop(-idx)
-                node_path = '/' + '/'.join(pathTokens)
+        if node.type().name().lower() in Define.CHILDNODES_EXCEPTION:
+            pathTokens.pop(-1)
+            node_path = "/" + "/".join(pathTokens)
+            self.isEditable
 
-                node_type = hou.node(node_path).type().name().lower()
+        if node.type().name().lower() in Define.PARENTNODES_EXCEPTION:
+            pathTokens.pop(-1)
 
-                if node_type in Define.CHILDNODES_EXCEPTION:
-                    pass
+        if len(pathTokens) >= 0:
+            node_path = "/" + "/".join(pathTokens)
+            self.isEditable(node_path)
+        else:
 
 
 

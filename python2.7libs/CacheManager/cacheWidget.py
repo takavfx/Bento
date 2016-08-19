@@ -51,6 +51,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         delegate = StatusDelegate(self)
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
+
     def _initUI(self):
 
         self.setColumnCount(len(self.HEADER_SETTING))
@@ -122,7 +123,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         cellMenu.addAction(actionOpenSrcFolder)
 
-        cellMenu.addSeparator()
+        cellMenu.addSeparator() ##----------------------------------------------
 
         ## Forcus selected item
         actionOpenSrcFolder = QtGui.QAction("Focus this node", self)
@@ -131,7 +132,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         cellMenu.addAction(actionOpenSrcFolder)
 
 
-        cellMenu.addSeparator()
+        cellMenu.addSeparator() ##----------------------------------------------
 
         actionExpandAll = QtGui.QAction("Expand all", self)
         actionExpandAll.triggered.connect(self.expandAll)
@@ -148,7 +149,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         self.blockSignals(True)
         self.clear()
-        self._cacheIDs = []
+        self._nodeIDs = []
 
         #-----------------------------------------------------------------------
         # make tree from path
@@ -172,6 +173,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             if len(pathTokens) > 0:
                 self._setChildItem(topItem, pathTokens, path, cache_path)
 
+        print self._nodeIDs
 
         self.sortItems(self.section("node"), QtCore.Qt.AscendingOrder)
         self.expandAll()
@@ -207,11 +209,11 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             endItem = childItem
             endItem.setText(self.section("cache_path"), cachePathItem)
 
-            ## Make pare endItem with node path
+            ## Make paire endItem with node path
             each = {}
             each["nodePath"] = nodePathItem
             each["endItem"]  = endItem
-            self._cacheIDs.append(each)
+            self._nodeIDs.append(each)
 
 
     def dirButtonClicked(self, treeItem):
@@ -251,15 +253,14 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
 
     def focusThisNode(self, treeItem):
-        print treeItem
-        print treeItem.objectName()
-        for nodeid in self._cacheIDs:
-            print nodeid
-            nodeItem = nodeid.values()
-            print nodeItem
-            if treeItem in nodeItem:
-                node_path = nodeid[0]
-                hou.node(node_path).setCurrent(on=True, clear_all_selected=True)
+        for nodeid in self._nodeIDs:
+
+            endItem = nodeid.get("endItem")
+
+            if treeItem is endItem:
+                node_path = nodeid.get("nodePath")
+                if node_path:
+                    hou.node(node_path).setCurrent(on=True, clear_all_selected=True)
 
 
     def makeListByDictKey(self, key, listOfDict, default = None):

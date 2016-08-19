@@ -45,7 +45,6 @@ class CacheManager(QtGui.QWidget):
 
     def initSettings(self):
         self.initGUI()
-        self.setSignals()
 
 
     def initGUI(self):
@@ -64,28 +63,8 @@ class CacheManager(QtGui.QWidget):
         self.setLayout(layout)
 
 
-    def setSignals(self):
-
-        self.UI.applyChangesButton.clicked.connect(self._applyChnagesButtonClicked)
-        self.UI.reloadButton.clicked.connect(self._reloadButtonClicked)
-        self.UI.testButton.clicked.connect(self._testButtonClicked)
-
-
     def _createCacheTree(self):
         return cacheWidget.cacheTreeWidget()
-
-
-    def _applyChnagesButtonClicked(self):
-        pass
-
-
-    def _reloadButtonClicked(self):
-        pass
-
-
-    def _testButtonClicked(self):
-        print core.houManager().getCacheList()
-
 
 
 def main(launch_type=""):

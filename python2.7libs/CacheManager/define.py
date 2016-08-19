@@ -14,6 +14,9 @@ CACHE_NODES = [
     # "alembicarchive",
 ]
 
+CHILDNODES_EXCEPTION = [
+    "filecache",
+]
 
 ## Define Houdini Environment Varialbes. This will also be used for displaying.
 ENV_TYPE = [
@@ -29,11 +32,12 @@ MENU_RELOAD = "Reload"
 
 ## Listed CHACHE_NODES node has children which should be got rid of as default.
 PARENTNODES_EXCEPTION = [
-    "filecache",
     "hlight",
     "arnold_light",
 
 ]
+
+
 
 #-------------------------------------------------------------------------------
 # EOF

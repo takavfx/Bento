@@ -44,7 +44,7 @@ class houManager(object):
                 eachNode_dict["env"]            = self.analizeEnv(cachePath)
                 eachNode_dict["expanded_path"]  = evalCachePath
                 eachNode_dict["color"]          = node.color().rgb()
-                eachNode_dict["editable"]       = isEditable(node_path)
+                eachNode_dict["editable"]       = True
 
                 current_cache_nodes.append(eachNode_dict)
 
@@ -113,7 +113,7 @@ class houManager(object):
             node_path = "/" + "/".join(pathTokens)
             self.isEditable(node_path)
         else:
-
+            pass
 
 
 

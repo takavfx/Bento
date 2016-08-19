@@ -35,21 +35,23 @@ class houManager(object):
                 eachNode_dict     = {}
                 node_path         = node.path()
                 node_type         = node.type().name().lower()
-                cachePath         = self.unexpStrPath(node_path, node_type)
+                cache_path        = self.unexpStrPath(node_path, node_type)
                 evalCachePath     = self.evalStrPath(node, node_type)
 
                 eachNode_dict["name"]           = node.name()
                 eachNode_dict["node_path"]      = node_path
-                eachNode_dict["cache_path"]     = cachePath
-                eachNode_dict["env"]            = self.analizeEnv(cachePath)
+                eachNode_dict["cache_path"]     = cache_path
+                eachNode_dict["env"]            = self.analizeEnv(cache_path)
                 eachNode_dict["expanded_path"]  = evalCachePath
                 eachNode_dict["color"]          = node.color().rgb()
-                eachNode_dict["editable"]       = True
+                eachNode_dict["editable"]       = self.isEditable(node_path)
 
                 current_cache_nodes.append(eachNode_dict)
 
-        for each in current_cache_nodes:
-            print each
+        # print current_cache_nodes
+        # for node in current_cache_nodes:
+        #     print node.get("editable")
+
         return current_cache_nodes
 
     @classmethod
@@ -83,39 +85,42 @@ class houManager(object):
 
     @classmethod
     def analizeEnv(self, path):
-        pathParts = path[0].split('/')
-        if pathParts[0] == None:
+        pathTokens = path[0].split('/')
+        if pathTokens[0] == None:
             return "-"
         else:
-            return pathParts[0]
+            return pathTokens[0]
 
     @classmethod
     def isEditable(self, path):
-        pathTokens = path.split('/').pop(0)
+        pathTokens = path.split('/')
+        pathTokens.pop(0)
         try:
             pathTokens.pop(-1)
 
         except IndexError:
-            return None
+            return False
 
-        node_path = "/" + "/".join(nextToken)
-        node = hou.node(node_path)
+        node_path = "/" + "/".join(pathTokens)
+        try:
+            node = hou.node(node_path)
+        except:
+            return False
 
         if node.type().name().lower() in Define.CHILDNODES_EXCEPTION:
-            pathTokens.pop(-1)
+            pathTokens.pop(0)
             node_path = "/" + "/".join(pathTokens)
-            self.isEditable
+            return True
 
         if node.type().name().lower() in Define.PARENTNODES_EXCEPTION:
             pathTokens.pop(-1)
-
-        if len(pathTokens) >= 0:
-            node_path = "/" + "/".join(pathTokens)
-            self.isEditable(node_path)
-        else:
-            pass
-
-
+            return False
+        #
+        # if len(pathTokens) >= 0:
+        #     node_path = "/" + "/".join(pathTokens)
+        #     self.isEditable(node_path)
+        # else:
+        #     pass
 
 #-------------------------------------------------------------------------------
 # OS file management class

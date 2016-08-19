@@ -124,6 +124,15 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         cellMenu.addSeparator()
 
+        ## Forcus selected item
+        actionOpenSrcFolder = QtGui.QAction("Focus this node", self)
+        actionOpenSrcFolder.triggered.connect(partial(self.focusThisNode, currentItem))
+
+        cellMenu.addAction(actionOpenSrcFolder)
+
+
+        cellMenu.addSeparator()
+
         actionExpandAll = QtGui.QAction("Expand all", self)
         actionExpandAll.triggered.connect(self.expandAll)
         cellMenu.addAction(actionExpandAll)
@@ -239,6 +248,18 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
             if not file == "":
                 treeItem.setText(self.section("cache_path"),file)
+
+
+    def focusThisNode(self, treeItem):
+        print treeItem
+        print treeItem.objectName()
+        for nodeid in self._cacheIDs:
+            print nodeid
+            nodeItem = nodeid.values()
+            print nodeItem
+            if treeItem in nodeItem:
+                node_path = nodeid[0]
+                hou.node(node_path).setCurrent(on=True, clear_all_selected=True)
 
 
     def makeListByDictKey(self, key, listOfDict, default = None):

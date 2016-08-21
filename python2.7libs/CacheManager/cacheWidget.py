@@ -10,6 +10,7 @@ import sys
 sys.dont_write_bytecode = True
 
 import os
+import re
 import platform
 from functools import partial
 from PySide import QtCore, QtGui
@@ -45,13 +46,12 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
 
     def __init__(self, parent=None):
-        super(cacheTreeWidget, self).__init__()
+        super(cacheTreeWidget, self).__init__(parent)
+        self.tree_items = {}
         self._cache_nodes = core.houManager.getCacheList()
         self._initUI()
         delegate = StatusDelegate(self)
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-
-        self.tree_items = {}
 
     def _initUI(self):
 
@@ -101,7 +101,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         raise RuntimeError("No %s key found in table setting." % key)
 
-
     def showCellMenu(self, pos):
         """Create menu for right click on the tree widget and show.
 
@@ -115,26 +114,26 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             return
 
         ## Replace Cache File
-        actionOpenSrcFolder = QtGui.QAction("Replace Cache File", self)
-        actionOpenSrcFolder.triggered.connect(partial(self._replaceCacheFile, currentItem))
+        actionReplaceCacheFile = QtGui.QAction("Replace Cache File", self)
+        actionReplaceCacheFile.triggered.connect(partial(self._replaceCacheFile, currentItem))
 
-        actionOpenSrcFolder.setEnabled(False)
+        actionReplaceCacheFile.setEnabled(False)
         if self._hasCacheImport(currentItem):
-            actionOpenSrcFolder.setEnabled(True)
+            actionReplaceCacheFile.setEnabled(True)
 
-        cellMenu.addAction(actionOpenSrcFolder)
+        cellMenu.addAction(actionReplaceCacheFile)
 
         cellMenu.addSeparator() ##----------------------------------------------
 
         ## Forcus selected item
-        actionOpenSrcFolder = QtGui.QAction("Focus this node", self)
-        actionOpenSrcFolder.triggered.connect(partial(self._focusThisNode, currentItem))
+        actionFocusThisNode = QtGui.QAction("Focus this node", self)
+        actionFocusThisNode.triggered.connect(partial(self._focusThisNode, currentItem))
 
-        actionOpenSrcFolder.setEnabled(False)
-        if self._hasCacheImport(currentItem):
-            actionOpenSrcFolder.setEnabled(True)
+        # actionFocusThisNode.setEnabled(False)
+        # if self._hasCacheImport(currentItem):
+        #     actionFocusThisNode.setEnabled(True)
 
-        cellMenu.addAction(actionOpenSrcFolder)
+        cellMenu.addAction(actionFocusThisNode)
 
 
         cellMenu.addSeparator() ##----------------------------------------------
@@ -146,6 +145,15 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         actionCollapseAll = QtGui.QAction("Collapse all", self)
         actionCollapseAll.triggered.connect(self.collapseAll)
         cellMenu.addAction(actionCollapseAll)
+
+        cellMenu.addSeparator() ##----------------------------------------------
+
+        ## Forcus selected item
+        debug = QtGui.QAction("Debug", self)
+        debug.triggered.connect(partial(self.getNodePath, currentItem))
+
+        cellMenu.addAction(debug)
+
 
         cellMenu.exec_(self.mapToGlobal(QtCore.QPoint(pos.x(), pos.y() + self.header().height())))
 
@@ -178,6 +186,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             if len(pathTokens) > 0:
                 self._setChildItem(topItem, pathTokens, path, cache_path)
 
+        # print self._nodeIDs
 
         self.sortItems(self.section("node"), QtCore.Qt.AscendingOrder)
         self.expandAll()
@@ -209,7 +218,9 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         if len(restTokens) > 0:
             self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem)
+
         else:
+
             endItem = childItem
             endItem.setText(self.section("cache_path"), cachePathItem)
 
@@ -218,6 +229,8 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             each["nodePath"] = nodePathItem
             each["endItem"]  = endItem
             self._nodeIDs.append(each)
+
+
 
     def _dirButtonClicked(self, treeItem):
         currentDir = treeItem.text(self.section("cache_path"))
@@ -256,21 +269,67 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
 
     def _focusThisNode(self, treeItem):
-        for nodeid in self._nodeIDs:
-            endItem = nodeid.get("endItem")
+        node_path = self.getNodePath(treeItem)
 
-            if treeItem is endItem:
-                node_path = nodeid.get("nodePath")
-                if node_path:
-                    hou.node(node_path).setCurrent(on=True, clear_all_selected=True)
+        if node_path:
+            hou.node(node_path).setCurrent(on=True, clear_all_selected=True)
+        else:
+            return False
+
+            # for nodeid in self._nodeIDs:
+            #     endItem = nodeid.get("endItem")
+            #
+            #     if treeItem is endItem:
+            #         node_path = nodeid.get("nodePath")
+            #         if node_path:
+            #             hou.node(node_path).setCurrent(on=True, clear_all_selected=True)
 
 
     def _hasCacheImport(self, treeItem):
-        for nodeid in self._nodeIDs:
-            endItem = nodeid.get("endItem")
+        seled_node_path = self.getNodePath(treeItem)
 
-            if treeItem is endItem:
+        for node in self._cache_nodes:
+            node_path = node.get('node_path')
+
+            if seled_node_path == node_path:
                 return True
+
+        # for nodeid in self._nodeIDs:
+        #     endItem = nodeid.get("endItem")
+        #
+        #     if treeItem is endItem:
+        #         return True
+
+
+    def getNodePath(self, treeItem):
+        pathTokens = []
+        childPath  = treeItem.text(self.section("node"))
+        parentItem = treeItem.parent()
+
+        if parentItem:
+            self._setPath(pathTokens, treeItem)
+
+        if pathTokens:
+            node_path = '/' + '/'.join(pathTokens)
+            return node_path
+
+
+    def _setPath(self, pathTokens, childItem):
+        path = childItem.text(self.section("node"))
+        pathTokens.insert(0, path)
+
+        try:
+            parentItem = childItem.parent()
+        except:
+            parentItem = None
+
+        if parentItem:
+            self._setPath(pathTokens, parentItem)
+
+
+    def hidUneditable(self):
+        pass
+
 
     def makeListByDictKey(self, key, listOfDict, default = None):
 

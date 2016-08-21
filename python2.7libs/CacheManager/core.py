@@ -30,97 +30,78 @@ class houManager(object):
 
         for node in all_nodes:
 
-            if node.type().name().lower() in Define.CACHE_NODES:
+            for item in Define.CACHE_NODES:
 
-                eachNode_dict     = {}
-                node_path         = node.path()
-                node_type         = node.type().name().lower()
-                cache_path        = self.unexpStrPath(node_path, node_type)
-                evalCachePath     = self.evalStrPath(node, node_type)
+                node_type = item.get("name")
 
-                eachNode_dict["name"]           = node.name()
-                eachNode_dict["node_path"]      = node_path
-                eachNode_dict["cache_path"]     = cache_path
-                eachNode_dict["env"]            = self.analizeEnv(cache_path)
-                eachNode_dict["expanded_path"]  = evalCachePath
-                eachNode_dict["color"]          = node.color().rgb()
-                eachNode_dict["editable"]       = self.isEditable(node_path)
+                if node.type().name().lower() == node_type:
 
-                current_cache_nodes.append(eachNode_dict)
+                    eachNode_dict     = {}
+                    node_path         = node.path()
+                    node_type         = node.type().name().lower()
+                    cache_path        = self.unexpStrPath(node_path, node_type)
+                    evalCachePath     = self.evalStrPath(node_path, node_type)
 
-        # print current_cache_nodes
-        # for node in current_cache_nodes:
-        #     print node.get("editable")
+                    eachNode_dict["name"]           = node.name()
+                    eachNode_dict["node_path"]      = node_path
+                    eachNode_dict["cache_path"]     = cache_path
+                    eachNode_dict["env"]            = self.analizeEnv(cache_path)
+                    eachNode_dict["expanded_path"]  = evalCachePath
+                    eachNode_dict["color"]          = node.color().rgb()
+                    # eachNode_dict["editable"]       = self.isEditable(node_path)
+
+                    current_cache_nodes.append(eachNode_dict)
+
+        print current_cache_nodes
+        for node in current_cache_nodes:
+            print node.get("editable")
 
         return current_cache_nodes
 
     @classmethod
     def unexpStrPath(self, path, opType):
-        if opType == "file" or "filecache":
-            parmPath = path + "/file"
-            unExpPath = hou.parm(parmPath).unexpandedString()
+        for item in Define.CACHE_NODES:
+            if item.get("name") == opType:
+                parmName = item.get("parmName")
 
-        elif opType == "alembic" or "alembicarchive":
-            parmPath = path + "/fileName"
-            unExpPath = hou.parm(parmPath).unexpandedString()
+        parmPath = path + '/' + parmName
+        unExpPath = hou.parm(parmPath).unexpandedString()
 
-        try:
-            return unExpPath
-        except:
-            return None
+        return unExpPath
 
     @classmethod
-    def evalStrPath(self, node, opType):
+    def evalStrPath(self, path, opType):
+        for item in Define.CACHE_NODES:
+            if item.get("name") == opType:
+                parmName = item.get("parmName")
 
-        if opType == "file" or "filecache":
-            evalPath = node.evalParm("file")
+        parmPath = path + '/' + parmName
+        evalPath = hou.evalParm(parmPath)
 
-        elif opType == "alembic" or "alembicarchive":
-            evalPath = node.evalParm("fileName")
+        return evalPath
 
-        try:
-            return evalPath
-        except:
-            return None
 
     @classmethod
     def analizeEnv(self, path):
-        pathTokens = path[0].split('/')
-        if pathTokens[0] == None:
-            return "-"
-        else:
-            return pathTokens[0]
+        try:
+            pathTokens = path[0].split('/')
+            if pathTokens[0] == None:
+                return "-"
+            else:
+                return pathTokens[0]
+        except:
+            return None
 
     @classmethod
     def isEditable(self, path):
-        pathTokens = path.split('/')
-        pathTokens.pop(0)
-        try:
-            pathTokens.pop(-1)
+        pathTokens = path.split("/")
 
-        except IndexError:
-            return False
-
-        node_path = "/" + "/".join(pathTokens)
-        try:
-            node = hou.node(node_path)
-        except:
-            return False
-
-        if node.type().name().lower() in Define.CHILDNODES_EXCEPTION:
-            pathTokens.pop(0)
-            node_path = "/" + "/".join(pathTokens)
-            return True
-
-        if node.type().name().lower() in Define.PARENTNODES_EXCEPTION:
-            pathTokens.pop(-1)
-            return False
+        # for path in range(len(pathTokens)):
         #
-        # if len(pathTokens) >= 0:
-        #     node_path = "/" + "/".join(pathTokens)
-        #     self.isEditable(node_path)
-        # else:
-        #     pass
+
+        return True
+
+
 
 #-------------------------------------------------------------------------------
 # OS file management class

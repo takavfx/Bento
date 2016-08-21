@@ -8,10 +8,10 @@ Define file for Cache Manager Tool.
 
 ## Define Cache Nodes to deal with this script.
 CACHE_NODES = [
-    "file",
-    "filecache",
-    # "alembic",
-    # "alembicarchive",
+    {"name":"file", "parmName":"file"},
+    {"name":"filecache", "parmName":"file"},
+    {"name":"alembic", "parmName":"fileName"},
+    {"name":"alembicarchive", "parmName":"fileName"},
 ]
 
 CHILDNODES_EXCEPTION = [
@@ -31,7 +31,7 @@ MENU_HELP = "Help"
 MENU_RELOAD = "Reload"
 
 ## Listed CHACHE_NODES node has children which should be got rid of as default.
-PARENTNODES_EXCEPTION = [
+NODES_EXCEPTION = [
     "hlight",
     "arnold_light",
 

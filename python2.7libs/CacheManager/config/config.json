@@ -1,0 +1,20 @@
+"CACHE_NODES" : [
+  {"name":"file", "parm":"file"},
+  {"name":"filecache", "parm":"file"},
+  {"name":"alembic"}
+]
+
+"CHILDNODES_EXCEPTION" : [
+  "filecache"
+]
+
+"ENV_TYPE" : [
+  "-",
+  "HIP",
+  "JOB"
+]
+
+"PARENTNODES_EXCEPTION" : [
+  "hlight",
+  "arnold_light"
+]

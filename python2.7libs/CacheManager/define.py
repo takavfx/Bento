@@ -18,6 +18,8 @@ CHILDNODES_EXCEPTION = [
     "filecache",
 ]
 
+DEBUG_MODE = False
+
 ## Define Houdini Environment Varialbes. This will also be used for displaying.
 ENV_TYPE = [
     '-',

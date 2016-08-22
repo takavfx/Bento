@@ -44,6 +44,10 @@ NODES_EXCEPTION = [
     "indirectlight",
     "arnold_light",
     "cam",
+    "testgeometry_pighead",
+    "testgeometry_rubbertoy",
+    "testgeometry_squab",
+    "testgeometry_ragdoll",
 ]
 
 

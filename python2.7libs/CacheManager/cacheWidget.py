@@ -38,8 +38,8 @@ class cacheTreeWidget(QtGui.QTreeWidget):
     HEADER_SETTING = [
         { "key": "node",           "display": "Node",           "width": 200,  "visible": True},
         { "key": "cache_path",     "display": "Cache Path",     "width": 500,  "visible": True},
-        { "key": "srcStatus",      "display": "Status",         "width": 50,  "visible": False},
         { "key": "env",            "display": "Env",            "width": 50,   "visible": False},
+        { "key": "srcStatus",      "display": "Status",         "width": 50,   "visible": True},
         { "key": "expanded_path",  "display": "Expanded path",  "width": 200,  "visible": False},
         { "key": "color",          "display": "Color",          "width": None, "visible": False}
     ]
@@ -148,11 +148,12 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         cellMenu.addSeparator() ##----------------------------------------------
 
-        ## Forcus selected item
-        debug = QtGui.QAction("Debug", self)
-        debug.triggered.connect(partial(self.getNodePath, currentItem))
+        # Debug
+        if Define.DEBUG_MODE:
+            debug = QtGui.QAction("Debug", self)
+            debug.triggered.connect(partial(self.getNodePath, currentItem))
 
-        cellMenu.addAction(debug)
+            cellMenu.addAction(debug)
 
 
         cellMenu.exec_(self.mapToGlobal(QtCore.QPoint(pos.x(), pos.y() + self.header().height())))
@@ -168,8 +169,10 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         # make tree from path
         #-----------------------------------------------------------------------
         for node in self._cache_nodes:
-            path = node.get("node_path")
+            path       = node.get("node_path")
             cache_path = node.get("cache_path")
+            editable   = node.get("editable")
+            print editable
             pathTokens = path.split("/")
             pathTokens.pop(0)
 
@@ -184,7 +187,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                 topItem = QtGui.QTreeWidgetItem(rootItem, [topToken])
 
             if len(pathTokens) > 0:
-                self._setChildItem(topItem, pathTokens, path, cache_path)
+                self._setChildItem(topItem, pathTokens, path, cache_path, editable)
 
         # print self._nodeIDs
 
@@ -204,7 +207,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         return None
 
 
-    def _setChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem):
+    def _setChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem, editable):
         try:
             nextToken = restTokens.pop(0)
 
@@ -215,12 +218,13 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         if childItem is None:
             childItem = QtGui.QTreeWidgetItem(parentItem, [nextToken])
+            if not editable:
+                childItem.setHidden(True)
 
         if len(restTokens) > 0:
-            self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem)
+            self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem, editable)
 
         else:
-
             endItem = childItem
             endItem.setText(self.section("cache_path"), cachePathItem)
 
@@ -276,14 +280,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         else:
             return False
 
-            # for nodeid in self._nodeIDs:
-            #     endItem = nodeid.get("endItem")
-            #
-            #     if treeItem is endItem:
-            #         node_path = nodeid.get("nodePath")
-            #         if node_path:
-            #             hou.node(node_path).setCurrent(on=True, clear_all_selected=True)
-
 
     def _hasCacheImport(self, treeItem):
         seled_node_path = self.getNodePath(treeItem)
@@ -293,12 +289,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
             if seled_node_path == node_path:
                 return True
-
-        # for nodeid in self._nodeIDs:
-        #     endItem = nodeid.get("endItem")
-        #
-        #     if treeItem is endItem:
-        #         return True
 
 
     def getNodePath(self, treeItem):
@@ -325,10 +315,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         if parentItem:
             self._setPath(pathTokens, parentItem)
-
-
-    def hidUneditable(self):
-        pass
 
 
     def makeListByDictKey(self, key, listOfDict, default = None):

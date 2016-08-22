@@ -37,8 +37,8 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
     HEADER_SETTING = [
         { "key": "node",           "display": "Node",           "width": 200,  "visible": True},
-        { "key": "cache_path",     "display": "Cache Path",     "width": 500,  "visible": True},
-        { "key": "env",            "display": "Env",            "width": 50,   "visible": False},
+        { "key": "cache_path",     "display": "Cache Path",     "width": 450,  "visible": True},
+        { "key": "env",            "display": "Env",            "width": 50,   "visible": True},
         { "key": "srcStatus",      "display": "Status",         "width": 50,   "visible": True},
         { "key": "expanded_path",  "display": "Expanded path",  "width": 200,  "visible": False},
         { "key": "color",          "display": "Color",          "width": None, "visible": False}
@@ -127,7 +127,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         ## Forcus selected item
         actionFocusThisNode = QtGui.QAction("Focus this node", self)
-        actionFocusThisNode.triggered.connect(partial(self._focusThisNode, currentItem))
+        actionFocusThisNode.triggered.connect(partial(self.focusThisNode, currentItem))
 
         # actionFocusThisNode.setEnabled(False)
         # if self._hasCacheImport(currentItem):
@@ -172,7 +172,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             path       = node.get("node_path")
             cache_path = node.get("cache_path")
             editable   = node.get("editable")
-            print editable
+
             pathTokens = path.split("/")
             pathTokens.pop(0)
 
@@ -188,8 +188,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
             if len(pathTokens) > 0:
                 self._setChildItem(topItem, pathTokens, path, cache_path, editable)
-
-        # print self._nodeIDs
 
         self.sortItems(self.section("node"), QtCore.Qt.AscendingOrder)
         self.expandAll()
@@ -208,6 +206,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
 
     def _setChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem, editable):
+
         try:
             nextToken = restTokens.pop(0)
 
@@ -233,7 +232,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             each["nodePath"] = nodePathItem
             each["endItem"]  = endItem
             self._nodeIDs.append(each)
-
 
 
     def _dirButtonClicked(self, treeItem):
@@ -262,6 +260,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
             if not file == "":
                 treeItem.setText(self.section("cache_path"),file)
+                self.setParm(treeItem, file)
 
         else:
             file = hou.ui.selectFile(
@@ -270,9 +269,10 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
             if not file == "":
                 treeItem.setText(self.section("cache_path"),file)
+                self.setParm(treeItem, file)
 
 
-    def _focusThisNode(self, treeItem):
+    def focusThisNode(self, treeItem):
         node_path = self.getNodePath(treeItem)
 
         if node_path:
@@ -315,6 +315,18 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         if parentItem:
             self._setPath(pathTokens, parentItem)
+
+
+    def setParm(self, treeItem, cache_path):
+        node_path = self.getNodePath(treeItem)
+        node_type = hou.node(node_path).type().name().lower()
+
+        for defNode in Define.CACHE_NODES:
+            defNode_type = defNode.get("name")
+            if node_type == defNode_type:
+                parmName = defNode.get("parmName")
+
+                hou.node(node_path).setParms({parmName:cache_path})
 
 
     def makeListByDictKey(self, key, listOfDict, default = None):

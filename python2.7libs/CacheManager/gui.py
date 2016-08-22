@@ -46,7 +46,6 @@ class CacheManager(QtGui.QWidget):
     def initSettings(self):
         self.initGUI()
 
-
     def initGUI(self):
 
         loader = QtUiTools.QUiLoader()

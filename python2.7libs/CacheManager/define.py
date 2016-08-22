@@ -12,10 +12,14 @@ CACHE_NODES = [
     {"name":"filecache", "parmName":"file"},
     {"name":"alembic", "parmName":"fileName"},
     {"name":"alembicarchive", "parmName":"fileName"},
+    {"name":"dopio", "parmName":"file"},
+
 ]
 
 CHILDNODES_EXCEPTION = [
     "filecache",
+    "dopio",
+    "df_alembic_import",
 ]
 
 DEBUG_MODE = False
@@ -39,6 +43,7 @@ NODES_EXCEPTION = [
     "ambient",
     "indirectlight",
     "arnold_light",
+    "cam",
 ]
 
 

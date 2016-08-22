@@ -102,8 +102,13 @@ class houManager(object):
         while range(len(pathTokens)):
             pathTokens.pop(-1)
             node_path = '/'.join(pathTokens)
-            try:
+
+            if pathTokens >= 2:
                 node_type = hou.node(node_path).type().name().lower()
+
+                for defNodes in Define.NODES_EXCEPTION:
+                    if node_type == defNodes:
+                        return False
 
                 for defNodes in Define.CHILDNODES_EXCEPTION:
                     if node_type == defNodes:
@@ -111,8 +116,10 @@ class houManager(object):
                         break
                     else:
                         return True
-            except:
+
+            else:
                 return True
+                break
 
 
 #-------------------------------------------------------------------------------

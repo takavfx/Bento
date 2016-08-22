@@ -13,6 +13,7 @@ import os
 import re
 import platform
 from functools import partial
+
 from PySide import QtCore, QtGui
 
 import hou
@@ -23,7 +24,7 @@ import define as Define
 reload(Define)
 
 
-# CURRENT_PATH = os.path.driname(__file__)
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 #-------------------------------------------------------------------------------
@@ -34,6 +35,8 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
     mouseReleased = QtCore.Signal(QtCore.QPoint)
     keyPressed = QtCore.Signal(QtGui.QKeyEvent)
+
+
 
     HEADER_SETTING = [
         { "key": "node",           "display": "Node",           "width": 200,  "visible": True},

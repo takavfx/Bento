@@ -34,9 +34,11 @@ MENU_RELOAD = "Reload"
 
 ## Listed CHACHE_NODES node has children which should be got rid of as default.
 NODES_EXCEPTION = [
+    "light",
     "hlight",
+    "ambient",
+    "indirectlight",
     "arnold_light",
-
 ]
 
 

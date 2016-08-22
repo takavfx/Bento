@@ -48,38 +48,41 @@ class houManager(object):
                     eachNode_dict["env"]            = self.analizeEnv(cache_path)
                     eachNode_dict["expanded_path"]  = evalCachePath
                     eachNode_dict["color"]          = node.color().rgb()
-                    # eachNode_dict["editable"]       = self.isEditable(node_path)
+                    eachNode_dict["editable"]       = self.isEditable(node_path)
 
                     current_cache_nodes.append(eachNode_dict)
 
-        print current_cache_nodes
-        for node in current_cache_nodes:
-            print node.get("editable")
+        # print current_cache_nodes
 
         return current_cache_nodes
 
     @classmethod
     def unexpStrPath(self, path, opType):
-        for item in Define.CACHE_NODES:
-            if item.get("name") == opType:
-                parmName = item.get("parmName")
+        try:
+            for item in Define.CACHE_NODES:
+                if item.get("name") == opType:
+                    parmName = item.get("parmName")
 
-        parmPath = path + '/' + parmName
-        unExpPath = hou.parm(parmPath).unexpandedString()
+            parmPath = path + '/' + parmName
+            unExpPath = hou.parm(parmPath).unexpandedString()
 
-        return unExpPath
+            return unExpPath
+        except:
+            return None
 
     @classmethod
     def evalStrPath(self, path, opType):
-        for item in Define.CACHE_NODES:
-            if item.get("name") == opType:
-                parmName = item.get("parmName")
+        try:
+            for item in Define.CACHE_NODES:
+                if item.get("name") == opType:
+                    parmName = item.get("parmName")
 
-        parmPath = path + '/' + parmName
-        evalPath = hou.evalParm(parmPath)
+            parmPath = path + '/' + parmName
+            evalPath = hou.evalParm(parmPath)
 
-        return evalPath
-
+            return evalPath
+        except:
+            return None
 
     @classmethod
     def analizeEnv(self, path):
@@ -96,11 +99,20 @@ class houManager(object):
     def isEditable(self, path):
         pathTokens = path.split("/")
 
-        # for path in range(len(pathTokens)):
-        #
+        while range(len(pathTokens)):
+            pathTokens.pop(-1)
+            node_path = '/'.join(pathTokens)
+            try:
+                node_type = hou.node(node_path).type().name().lower()
 
-        return True
-
+                for defNodes in Define.CHILDNODES_EXCEPTION:
+                    if node_type == defNodes:
+                        return False
+                        break
+                    else:
+                        return True
+            except:
+                return True
 
 
 #-------------------------------------------------------------------------------

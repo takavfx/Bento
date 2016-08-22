@@ -229,6 +229,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         else:
             endItem = childItem
             endItem.setText(self.section("cache_path"), cachePathItem)
+            endItem.setToolTip(self.section("cache_path"), cachePathItem)
 
             ## Make paire endItem with node path
             each = {}

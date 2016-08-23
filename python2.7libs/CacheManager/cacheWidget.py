@@ -42,7 +42,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         { "key": "node",           "display": "Node",           "width": 200,  "visible": True},
         { "key": "cache_path",     "display": "Cache Path",     "width": 450,  "visible": True},
         { "key": "env",            "display": "Env",            "width": 50,   "visible": False},
-        { "key": "status",      "display": "Status",         "width": 50,   "visible": True},
+        { "key": "status",         "display": "Status",         "width": 50,   "visible": True},
         { "key": "expanded_path",  "display": "Expanded path",  "width": 200,  "visible": False},
         { "key": "color",          "display": "Color",          "width": None, "visible": False}
     ]
@@ -50,7 +50,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
     def __init__(self, parent=None):
         super(cacheTreeWidget, self).__init__(parent)
-        self.tree_items = {}
         self._cache_nodes = core.houManager.getCacheList()
         self._initUI()
         delegate = StatusDelegate(self)
@@ -59,10 +58,11 @@ class cacheTreeWidget(QtGui.QTreeWidget):
     def _initUI(self):
 
         self.setColumnCount(len(self.HEADER_SETTING))
-        self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
         headerLabels = self.makeListByDictKey("display", self.HEADER_SETTING, "")
         self.setHeaderLabels(headerLabels)
         self.setSortingEnabled(True)
+        self.setAlternatingRowColors(True)
+        self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
         self._setHeaderWidth()
         self._setHeaderVisible()
         self.setData()
@@ -229,6 +229,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                                         QtGui.QBrush(QtGui.QColor("#ecdd16")))
                 childItem.setForeground(self.section("status"),
                                         QtGui.QBrush(QtGui.QColor("#ecdd16")))
+
             if status == "error":
                 # childItem.setForeground(self.section("node"),
                 #                         QtGui.QBrush(QtGui.QColor("#ec1616")))
@@ -241,10 +242,9 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem, editable, status)
 
         else:
-            endItem = childItem
-            endItem.setText(self.section("cache_path"), cachePathItem)
-            endItem.setToolTip(self.section("cache_path"), cachePathItem)
-            endItem.setText(self.section("status"), status)
+            childItem.setText(self.section("cache_path"), cachePathItem)
+            childItem.setToolTip(self.section("cache_path"), cachePathItem)
+            childItem.setText(self.section("status"), status)
 
 
     def _dirButtonClicked(self, treeItem):
@@ -361,11 +361,12 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         return True
 
 
-class StatusDelegate(QtGui.QStyledItemDelegate):
-    """docstring for StatusDelegate"""
-    def __init__(self, parent):
-        super(StatusDelegate, self).__init__(parent)
-        self._parent = parent
+    def resetItems(self):
+        self._cache_nodes = core.houManager.getCacheList()
+        self.clear()
+        print "test"
+        # self.setData()
+
 
 
 #-------------------------------------------------------------------------------

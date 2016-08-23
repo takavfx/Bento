@@ -14,6 +14,11 @@ Bento is a toolset for houdini.
 * [Cache Dependency](docs/cacheDependency.md)
 * [Creat Delayed Load Procedural](docs/create-dlp.md)
 
+### Python Panel
+
+* Cache Manager
+
+![alt tag](docs/img/ss_cache_manager_0001.png)
 
 ## Install
 1. Clone or Download this repository to your place you want to download.

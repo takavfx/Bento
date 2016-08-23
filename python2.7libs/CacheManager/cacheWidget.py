@@ -132,9 +132,9 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         actionFocusThisNode = QtGui.QAction("Focus this node", self)
         actionFocusThisNode.triggered.connect(partial(self.focusThisNode, currentItem))
 
-        # actionFocusThisNode.setEnabled(False)
-        # if self._hasCacheImport(currentItem):
-        #     actionFocusThisNode.setEnabled(True)
+        actionFocusThisNode.setEnabled(False)
+        if self.isTopItem(currentItem):
+            actionFocusThisNode.setEnabled(True)
 
         cellMenu.addAction(actionFocusThisNode)
 
@@ -166,7 +166,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         self.blockSignals(True)
         self.clear()
-        self._nodeIDs = []
 
         #-----------------------------------------------------------------------
         # make tree from path
@@ -175,7 +174,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             path       = node.get("node_path")
             cache_path = node.get("cache_path")
             editable   = node.get("editable")
-            error      = node.get("error")
+            status     = node.get("status")
 
             pathTokens = path.split("/")
             pathTokens.pop(0)
@@ -185,13 +184,13 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
             topToken = pathTokens.pop(0)
             rootItem = self.invisibleRootItem()
-            topItem = self._findChild(rootItem, topToken)
+            topItem = self.findChild(rootItem, topToken)
 
             if topItem is None:
                 topItem = QtGui.QTreeWidgetItem(rootItem, [topToken])
 
             if len(pathTokens) > 0:
-                self._setChildItem(topItem, pathTokens, path, cache_path, editable, error)
+                self._setChildItem(topItem, pathTokens, path, cache_path, editable, status)
 
         self.sortItems(self.section("node"), QtCore.Qt.AscendingOrder)
         self.expandAll()
@@ -199,7 +198,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         self._setHeaderWidth()
 
 
-    def _findChild(self, item, nodeName):
+    def findChild(self, item, nodeName):
 
         for idx in range(item.childCount()):
             childItem = item.child(idx)
@@ -209,7 +208,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         return None
 
 
-    def _setChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem, editable, error):
+    def _setChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem, editable, status):
 
         try:
             nextToken = restTokens.pop(0)
@@ -217,7 +216,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         except IndexError:
             return childItem
 
-        childItem = self._findChild(parentItem, nextToken)
+        childItem = self.findChild(parentItem, nextToken)
 
         if childItem is None:
             childItem = QtGui.QTreeWidgetItem(parentItem, [nextToken])
@@ -225,19 +224,13 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                 childItem.setHidden(True)
 
         if len(restTokens) > 0:
-            self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem, editable, error)
+            self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem, editable, status)
 
         else:
             endItem = childItem
             endItem.setText(self.section("cache_path"), cachePathItem)
             endItem.setToolTip(self.section("cache_path"), cachePathItem)
-            endItem.setText(self.section("srcStatus"), error)
-
-            ## Make paire endItem with node path
-            each = {}
-            each["nodePath"] = nodePathItem
-            each["endItem"]  = endItem
-            self._nodeIDs.append(each)
+            endItem.setText(self.section("srcStatus"), status)
 
 
     def _dirButtonClicked(self, treeItem):
@@ -344,6 +337,14 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             else:
                 res.append(default)
         return res
+
+
+    def isTopItem(self, treeItem):
+        parent = treeItem.parent()
+        if not parent:
+            return False
+
+        return True
 
 
 class StatusDelegate(QtGui.QStyledItemDelegate):

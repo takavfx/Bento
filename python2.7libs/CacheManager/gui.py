@@ -46,8 +46,10 @@ class CacheManager(QtGui.QWidget):
 
         self.initSettings()
 
+
     def initSettings(self):
         self.initGUI()
+
 
     def initGUI(self):
 
@@ -63,6 +65,7 @@ class CacheManager(QtGui.QWidget):
         layout = QtGui.QVBoxLayout()
         layout.addWidget(self.UI)
         self.setLayout(layout)
+
 
     def _createMenuBar(self):
         """Helper method for the constructor.
@@ -85,6 +88,7 @@ class CacheManager(QtGui.QWidget):
         self.menuBar.setCornerWidget(help_button)
         self.menuBar.cornerWidget(QtCore.Qt.TopRightCorner)
 
+
     def _createEditMenu(self):
         """Helper method for the constructor.
 
@@ -93,12 +97,13 @@ class CacheManager(QtGui.QWidget):
         edit_menu = QtGui.QMenu(self)
 
         reloadAction = edit_menu.addAction("Reload")
-        reloadAction.setShortcuts("Ctrl+R")
+        reloadAction.setShortcut("Ctrl+R")
         self.addAction(reloadAction)
         reloadAction.triggered.connect(self._reload)
 
         edit_action = self.menuBar.addAction("Edit")
         edit_action.setMenu(edit_menu)
+
 
     def _createCacheTree(self):
         return cacheWidget.cacheTreeWidget()
@@ -106,6 +111,7 @@ class CacheManager(QtGui.QWidget):
 
     def _reload(self):
         cacheWidget.cacheTreeWidget()
+
 
 def main(launch_type=""):
     try:

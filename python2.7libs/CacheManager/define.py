@@ -19,7 +19,6 @@ CACHE_NODES = [
 CHILDNODES_EXCEPTION = [
     "filecache",
     "dopio",
-    "df_alembic_import",
 ]
 
 DEBUG_MODE = False

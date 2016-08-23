@@ -41,8 +41,8 @@ class cacheTreeWidget(QtGui.QTreeWidget):
     HEADER_SETTING = [
         { "key": "node",           "display": "Node",           "width": 200,  "visible": True},
         { "key": "cache_path",     "display": "Cache Path",     "width": 450,  "visible": True},
-        { "key": "env",            "display": "Env",            "width": 50,   "visible": True},
-        { "key": "srcStatus",      "display": "Status",         "width": 50,   "visible": True},
+        { "key": "env",            "display": "Env",            "width": 50,   "visible": False},
+        { "key": "status",      "display": "Status",         "width": 50,   "visible": True},
         { "key": "expanded_path",  "display": "Expanded path",  "width": 200,  "visible": False},
         { "key": "color",          "display": "Color",          "width": None, "visible": False}
     ]
@@ -222,6 +222,20 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             childItem = QtGui.QTreeWidgetItem(parentItem, [nextToken])
             if not editable:
                 childItem.setHidden(True)
+            if status == "bypassed":
+                # childItem.setForeground(self.section("node"),
+                #                         QtGui.QBrush(QtGui.QColor("#ecdd16")))
+                childItem.setForeground(self.section("cache_path"),
+                                        QtGui.QBrush(QtGui.QColor("#ecdd16")))
+                childItem.setForeground(self.section("status"),
+                                        QtGui.QBrush(QtGui.QColor("#ecdd16")))
+            if status == "error":
+                # childItem.setForeground(self.section("node"),
+                #                         QtGui.QBrush(QtGui.QColor("#ec1616")))
+                childItem.setForeground(self.section("cache_path"),
+                                        QtGui.QBrush(QtGui.QColor("#ec1616")))
+                childItem.setForeground(self.section("status"),
+                                        QtGui.QBrush(QtGui.QColor("#fe2a2a")))
 
         if len(restTokens) > 0:
             self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem, editable, status)
@@ -230,7 +244,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             endItem = childItem
             endItem.setText(self.section("cache_path"), cachePathItem)
             endItem.setToolTip(self.section("cache_path"), cachePathItem)
-            endItem.setText(self.section("srcStatus"), status)
+            endItem.setText(self.section("status"), status)
 
 
     def _dirButtonClicked(self, treeItem):

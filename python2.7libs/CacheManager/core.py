@@ -6,8 +6,12 @@ Core program to exchange datas.
 """
 #-------------------------------------------------------------------------------
 
-import os, sys
+import sys
 sys.dont_write_bytecode = True
+
+import os
+import re
+
 import hou
 
 from . import define as Define
@@ -54,9 +58,7 @@ class houManager(object):
                     current_cache_nodes.append(eachNode_dict)
 
         # print current_cache_nodes
-        for node in current_cache_nodes:
-            print node.get("node_path")
-            print node.get("editable")
+
         return current_cache_nodes
 
     @classmethod
@@ -90,8 +92,10 @@ class houManager(object):
     @classmethod
     def analizeEnv(self, path):
         try:
-            pathTokens = path[0].split('/')
-            if pathTokens[0] == None:
+            obj = re.search("$", path)
+
+            if obj:
+                pathTokens = path.split('/')
                 return "-"
             else:
                 return pathTokens[0]
@@ -127,11 +131,15 @@ class houManager(object):
 
     @classmethod
     def setStatus(self, node):
-        bypass = node.isFlagReadable(hou.nodeFlag.Bypass)
+        node_cat = node.type().category().name()
         error  = node.errors()
 
-        if not error == "":
-            return "error"
+        if node_cat == "Sop":
+            if node.isBypassed():
+                return "bypassed"
+
+            if not error == "":
+                return "error"
 
 
 

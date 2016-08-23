@@ -175,6 +175,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             path       = node.get("node_path")
             cache_path = node.get("cache_path")
             editable   = node.get("editable")
+            error      = node.get("error")
 
             pathTokens = path.split("/")
             pathTokens.pop(0)
@@ -190,7 +191,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                 topItem = QtGui.QTreeWidgetItem(rootItem, [topToken])
 
             if len(pathTokens) > 0:
-                self._setChildItem(topItem, pathTokens, path, cache_path, editable)
+                self._setChildItem(topItem, pathTokens, path, cache_path, editable, error)
 
         self.sortItems(self.section("node"), QtCore.Qt.AscendingOrder)
         self.expandAll()
@@ -208,7 +209,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         return None
 
 
-    def _setChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem, editable):
+    def _setChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem, editable, error):
 
         try:
             nextToken = restTokens.pop(0)
@@ -224,12 +225,13 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                 childItem.setHidden(True)
 
         if len(restTokens) > 0:
-            self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem, editable)
+            self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem, editable, error)
 
         else:
             endItem = childItem
             endItem.setText(self.section("cache_path"), cachePathItem)
             endItem.setToolTip(self.section("cache_path"), cachePathItem)
+            endItem.setText(self.section("srcStatus"), error)
 
             ## Make paire endItem with node path
             each = {}

@@ -49,6 +49,7 @@ class houManager(object):
                     eachNode_dict["expanded_path"]  = evalCachePath
                     eachNode_dict["color"]          = node.color().rgb()
                     eachNode_dict["editable"]       = self.isEditable(node_path)
+                    eachNode_dict["error"]          = self.hasError(node_path)
 
                     current_cache_nodes.append(eachNode_dict)
 
@@ -120,6 +121,17 @@ class houManager(object):
             else:
                 return True
                 break
+
+
+    @classmethod
+    def hasError(self, path):
+        error = hou.node(path).errors()
+
+        if not error == "":
+            return "error"
+        else:
+            return
+
 
 
 #-------------------------------------------------------------------------------

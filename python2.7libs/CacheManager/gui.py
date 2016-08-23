@@ -110,7 +110,7 @@ class CacheManager(QtGui.QWidget):
 
 
     def _reload(self):
-        cacheWidget.cacheTreeWidget()
+        cacheWidget.cacheTreeWidget().resetItems()
 
 
 def main(launch_type=""):

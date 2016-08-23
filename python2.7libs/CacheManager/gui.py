@@ -75,7 +75,6 @@ class CacheManager(QtGui.QWidget):
         help_button = QtGui.QToolButton()
         help_button.setFixedWidth(25)
         help_button.setFixedHeight(25)
-        # self.toolbarLayout.addWidget(help_button)
         # help_button.clicked.connect(self.showHelp)
         try:
             help_button.setIcon(hou.ui.createQtIcon("BUTTONS_help", 32, 32))

@@ -49,12 +49,14 @@ class houManager(object):
                     eachNode_dict["expanded_path"]  = evalCachePath
                     eachNode_dict["color"]          = node.color().rgb()
                     eachNode_dict["editable"]       = self.isEditable(node_path)
-                    eachNode_dict["error"]          = self.hasError(node_path)
+                    eachNode_dict["status"]         = self.setStatus(node)
 
                     current_cache_nodes.append(eachNode_dict)
 
         # print current_cache_nodes
-
+        for node in current_cache_nodes:
+            print node.get("node_path")
+            print node.get("editable")
         return current_cache_nodes
 
     @classmethod
@@ -105,7 +107,10 @@ class houManager(object):
             node_path = '/'.join(pathTokens)
 
             if pathTokens >= 2:
-                node_type = hou.node(node_path).type().name().lower()
+                try:
+                    node_type = hou.node(node_path).type().name().lower()
+                except:
+                    return True
 
                 for defNodes in Define.NODES_EXCEPTION:
                     if node_type == defNodes:
@@ -114,9 +119,6 @@ class houManager(object):
                 for defNodes in Define.CHILDNODES_EXCEPTION:
                     if node_type == defNodes:
                         return False
-                        break
-                    else:
-                        return True
 
             else:
                 return True
@@ -124,13 +126,12 @@ class houManager(object):
 
 
     @classmethod
-    def hasError(self, path):
-        error = hou.node(path).errors()
+    def setStatus(self, node):
+        bypass = node.isFlagReadable(hou.nodeFlag.Bypass)
+        error  = node.errors()
 
         if not error == "":
             return "error"
-        else:
-            return
 
 
 
@@ -165,15 +166,6 @@ class fileManager(object):
 # Other useful methods
 #-------------------------------------------------------------------------------
 
-def makeListByDictKey(key, listOfDict, default = None):
-
-    res = []
-    for d in listOfDict:
-        if d.has_key(key):
-            res.append(d[key])
-        else:
-            res.append(default)
-    return res
 
 
 #-------------------------------------------------------------------------------

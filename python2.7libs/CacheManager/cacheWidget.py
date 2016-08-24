@@ -50,9 +50,12 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
     def __init__(self, parent=None):
         super(cacheTreeWidget, self).__init__(parent)
+        self.initSettings()
+        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+
+    def initSettings(self):
         self._cache_nodes = core.houManager.getCacheList()
         self._initUI()
-        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
     def _initUI(self):
 
@@ -339,13 +342,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             return False
         else:
             return True
-
-
-    def resetItems(self):
-        self._cache_nodes = core.houManager.getCacheList()
-        self.clear()
-        print "test"
-        # self.setData()
 
 
     def makeListByDictKey(self, key, listOfDict, default = None):

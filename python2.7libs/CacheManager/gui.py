@@ -8,10 +8,12 @@ Managing cache tool.
 
 import os, sys
 sys.dont_write_bytecode = True
-import hou
 
+import webbrowser
 from PySide import QtCore, QtGui
 from PySide import QtUiTools
+
+import hou
 
 import core
 reload(core)
@@ -54,8 +56,15 @@ class CacheManager(QtGui.QWidget):
     def initGUI(self):
 
         toolbarLayout = self.UI.toolbarLayout
+
+        ## Create Menu Bar
         self._createMenuBar()
+
+        ## Add Edit Menu
         self._createEditMenu()
+
+        ## Add About Menu
+        self._createAboutMenu()
         toolbarLayout.addWidget(self.menuBar)
 
         self.cacheTreeWidget = self._createCacheTree()
@@ -75,42 +84,55 @@ class CacheManager(QtGui.QWidget):
         self.menuBar = QtGui.QMenuBar()
         self.menuBar.setFixedHeight(25)
 
-        help_button = QtGui.QToolButton()
-        help_button.setFixedWidth(25)
-        help_button.setFixedHeight(25)
+        # help_button = QtGui.QToolButton()
+        # help_button.setFixedWidth(25)
+        # help_button.setFixedHeight(25)
         # help_button.clicked.connect(self.showHelp)
-        try:
-            help_button.setIcon(hou.ui.createQtIcon("BUTTONS_help", 32, 32))
-        except:
-            help_button.setText("H")
-        help_button.setProperty("transparent", True);
+        # try:
+        #     help_button.setIcon(hou.ui.createQtIcon("BUTTONS_help", 32, 32))
+        # except:
+        #     help_button.setText("H")
+        # help_button.setProperty("transparent", True);
         #
-        self.menuBar.setCornerWidget(help_button)
-        self.menuBar.cornerWidget(QtCore.Qt.TopRightCorner)
+        # self.menuBar.setCornerWidget(help_button)
+        # self.menuBar.cornerWidget(QtCore.Qt.TopRightCorner)
 
 
     def _createEditMenu(self):
-        """Helper method for the constructor.
 
-        Create the Pose menu.
-        """
         edit_menu = QtGui.QMenu(self)
 
         reloadAction = edit_menu.addAction("Reload")
         reloadAction.setShortcut("Ctrl+R")
         self.addAction(reloadAction)
-        reloadAction.triggered.connect(self._reload)
+        reloadAction.triggered.connect(self.reload)
 
         edit_action = self.menuBar.addAction("Edit")
         edit_action.setMenu(edit_menu)
+
+    def _createAboutMenu(self):
+
+        about_menu = QtGui.QMenu(self)
+
+        openGitHubAction = QtGui.QAction("Bento on GitHub", self)
+        openGitHubAction.triggered.connect(self.gitHubButtonTriggered)
+        # load_menu.addAction(openGitHubAction)
+
+        about_menu.addAction(openGitHubAction)
+        about_action = self.menuBar.addAction("About")
+        about_action.setMenu(about_menu)
 
 
     def _createCacheTree(self):
         return cacheWidget.cacheTreeWidget()
 
 
-    def _reload(self):
-        cacheWidget.cacheTreeWidget().resetItems()
+    def reload(self):
+        self.cacheTreeWidget.initSettings()
+
+
+    def gitHubButtonTriggered(self):
+        webbrowser.open('http://github.com/takavfx/Bento')
 
 
 def main(launch_type=""):

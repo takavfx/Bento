@@ -52,7 +52,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         super(cacheTreeWidget, self).__init__(parent)
         self._cache_nodes = core.houManager.getCacheList()
         self._initUI()
-        delegate = StatusDelegate(self)
         self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
     def _initUI(self):
@@ -220,23 +219,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         if childItem is None:
             childItem = QtGui.QTreeWidgetItem(parentItem, [nextToken])
-            if not editable:
-                childItem.setHidden(True)
-            if status == "bypassed":
-                # childItem.setForeground(self.section("node"),
-                #                         QtGui.QBrush(QtGui.QColor("#ecdd16")))
-                childItem.setForeground(self.section("cache_path"),
-                                        QtGui.QBrush(QtGui.QColor("#ecdd16")))
-                childItem.setForeground(self.section("status"),
-                                        QtGui.QBrush(QtGui.QColor("#ecdd16")))
-
-            if status == "error":
-                # childItem.setForeground(self.section("node"),
-                #                         QtGui.QBrush(QtGui.QColor("#ec1616")))
-                childItem.setForeground(self.section("cache_path"),
-                                        QtGui.QBrush(QtGui.QColor("#ec1616")))
-                childItem.setForeground(self.section("status"),
-                                        QtGui.QBrush(QtGui.QColor("#fe2a2a")))
+            self.setStatus(childItem, cachePathItem, editable, status)
 
         if len(restTokens) > 0:
             self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem, editable, status)
@@ -247,18 +230,24 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             childItem.setText(self.section("status"), status)
 
 
-    def _dirButtonClicked(self, treeItem):
-        currentDir = treeItem.text(self.section("cache_path"))
-        while currentDir and not os.path.exists(currentDir):
-            currentDir = os.path.dirname(currentDir)
+    def setStatus(self, treeItem, cachePathItem, editable, status):
+        if not editable:
+            treeItem.setHidden(True)
+        if status == "bypassed":
+            # treeItem.setForeground(self.section("node"),
+            #                         QtGui.QBrush(QtGui.QColor("#ecdd16")))
+            treeItem.setForeground(self.section("cache_path"),
+                                    QtGui.QBrush(QtGui.QColor("#ecdd16")))
+            treeItem.setForeground(self.section("status"),
+                                    QtGui.QBrush(QtGui.QColor("#ecdd16")))
 
-        if os.path.exists(currentDir):
-            os.chdir(currentDir)
-
-        dir = QtGui.QFileDialog.getExistingDirectory(self, caption='Set Dir', dir=currentDir)
-
-        if dir:
-            treeItem.setText(dir)
+        if status == "error":
+            # treeItem.setForeground(self.section("node"),
+            #                         QtGui.QBrush(QtGui.QColor("#ec1616")))
+            treeItem.setForeground(self.section("cache_path"),
+                                    QtGui.QBrush(QtGui.QColor("#ec1616")))
+            treeItem.setForeground(self.section("status"),
+                                    QtGui.QBrush(QtGui.QColor("#fe2a2a")))
 
 
     def _replaceCacheFile(self, treeItem):
@@ -272,7 +261,8 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                 )
 
             if not file == "":
-                treeItem.setText(self.section("cache_path"),file)
+                treeItem.setText(self.section("cache_path"), file)
+                treeItem.setToolTip(self.section("cache_path"), file)
                 self.setParm(treeItem, file)
 
         else:
@@ -283,6 +273,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             if not file == "":
                 treeItem.setText(self.section("cache_path"),file)
                 self.setParm(treeItem, file)
+                treeItem.setToolTip(self.section("cache_path"), file)
 
 
     def focusThisNode(self, treeItem):
@@ -342,6 +333,21 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                 hou.node(node_path).setParms({parmName:cache_path})
 
 
+    def isTopItem(self, treeItem):
+        parent = treeItem.parent()
+        if not parent:
+            return False
+        else:
+            return True
+
+
+    def resetItems(self):
+        self._cache_nodes = core.houManager.getCacheList()
+        self.clear()
+        print "test"
+        # self.setData()
+
+
     def makeListByDictKey(self, key, listOfDict, default = None):
 
         res = []
@@ -352,20 +358,6 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                 res.append(default)
         return res
 
-
-    def isTopItem(self, treeItem):
-        parent = treeItem.parent()
-        if not parent:
-            return False
-
-        return True
-
-
-    def resetItems(self):
-        self._cache_nodes = core.houManager.getCacheList()
-        self.clear()
-        print "test"
-        # self.setData()
 
 
 

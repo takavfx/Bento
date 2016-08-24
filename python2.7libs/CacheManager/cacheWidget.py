@@ -343,6 +343,12 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         else:
             return True
 
+    def reload(self):
+        self.clear()
+        self._cache_nodes = core.houManager.getCacheList()
+        self.setData()
+
+
 
     def makeListByDictKey(self, key, listOfDict, default = None):
 

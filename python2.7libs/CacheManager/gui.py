@@ -105,7 +105,7 @@ class CacheManager(QtGui.QWidget):
         reloadAction = edit_menu.addAction("Reload")
         reloadAction.setShortcut("Ctrl+R")
         self.addAction(reloadAction)
-        reloadAction.triggered.connect(self.reload)
+        reloadAction.triggered.connect(self.reloadButtonTriggered)
 
         edit_action = self.menuBar.addAction("Edit")
         edit_action.setMenu(edit_menu)
@@ -127,8 +127,8 @@ class CacheManager(QtGui.QWidget):
         return cacheWidget.cacheTreeWidget()
 
 
-    def reload(self):
-        self.cacheTreeWidget.initSettings()
+    def reloadButtonTriggered(self):
+        self.cacheTreeWidget.reload()
 
 
     def gitHubButtonTriggered(self):

@@ -16,7 +16,7 @@ Bento is a toolset for houdini.
 
 ### Python Panel
 
-* Cache Manager
+* [Cache Manager](docs/cacheManager.md)
 
 ![alt tag](docs/img/ss_cache_manager_0001.png)
 
@@ -25,7 +25,8 @@ Bento is a toolset for houdini.
 2. Place this repository to houdini-accessible place.
 3. Open **houdini.env**.
 4. Add `HOUDINI_PATH` in the **houdini.env** file.
-  * Ex: `HOUDINI_PATH = &:/anywhere/you/want/to/install/Bento` (Linux)
+  * Ex: `HOUDINI_PATH = /anywhere/you/want/to/install/Bento:&` (Linux)
+  * Ex: `HOUDINI_PATH = \anywhere\you\want\to\install\Bento;&` (Windows)
   * To add `&` is important to keep original Houdini Path.
 
 

@@ -37,6 +37,7 @@ class houManager(object):
             for item in Define.CACHE_NODES:
 
                 node_type = item.get("name")
+                iotype    = item.get("iotype")
 
                 if node.type().name().lower() == node_type:
 
@@ -44,6 +45,7 @@ class houManager(object):
                     node_path         = node.path()
                     node_type         = node.type().name().lower()
                     cache_path        = self.unexpStrPath(node_path, node_type)
+                    node_cat          = node.type().category().name()
                     evalCachePath     = self.evalStrPath(node_path, node_type)
 
                     eachNode_dict["name"]           = node.name()
@@ -52,8 +54,9 @@ class houManager(object):
                     eachNode_dict["env"]            = self.analizeEnv(cache_path)
                     eachNode_dict["expanded_path"]  = evalCachePath
                     eachNode_dict["color"]          = node.color().rgb()
+                    eachNode_dict["iotype"]         = self.setIoType(node_path, iotype, node_cat)
                     eachNode_dict["editable"]       = self.isEditable(node_path)
-                    eachNode_dict["status"]         = self.setStatus(node)
+                    eachNode_dict["status"]         = self.setStatus(node, node_cat)
 
                     current_cache_nodes.append(eachNode_dict)
 
@@ -130,8 +133,8 @@ class houManager(object):
 
 
     @classmethod
-    def setStatus(self, node):
-        node_cat = node.type().category().name()
+    def setStatus(self, node, node_cat):
+
         error  = node.errors()
 
         if node_cat == "Sop":
@@ -140,6 +143,33 @@ class houManager(object):
 
             if not error == "":
                 return "error"
+
+
+    @classmethod
+    def setIoType(self, path, iotype, node_cat):
+
+        if node_cat == "Driver":
+            return "write"
+
+        if iotype[0] == "read":
+            return iotype[0]
+
+        elif iotype[0] == "write":
+            return iotype[0]
+
+        elif iotype[0] == "both":
+
+            parm = path + '/' + iotype[1]
+            switch = hou.evalParm(parm)
+
+            if switch in iotype[2]:
+                return "read"
+
+            elif switch in iotype[3]:
+                return "write"
+
+            else:
+                return "both"
 
 
 

@@ -40,11 +40,12 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
     HEADER_SETTING = [
         { "key": "node",           "display": "Node",           "width": 200,  "visible": True},
-        { "key": "cache_path",     "display": "Cache Path",     "width": 450,  "visible": True},
+        { "key": "cache_path",     "display": "Cache Path",     "width": 300,  "visible": True},
         { "key": "env",            "display": "Env",            "width": 50,   "visible": False},
+        { "key": "iotype",         "display": "R/W",            "width": 70,   "visible": True},
         { "key": "status",         "display": "Status",         "width": 50,   "visible": True},
         { "key": "expanded_path",  "display": "Expanded path",  "width": 200,  "visible": False},
-        { "key": "color",          "display": "Color",          "width": None, "visible": False}
+        { "key": "color",          "display": "Color",          "width": None, "visible": False},
     ]
 
 
@@ -175,6 +176,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         for node in self._cache_nodes:
             path       = node.get("node_path")
             cache_path = node.get("cache_path")
+            iotype     = node.get("iotype")
             editable   = node.get("editable")
             status     = node.get("status")
 
@@ -192,7 +194,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                 topItem = QtGui.QTreeWidgetItem(rootItem, [topToken])
 
             if len(pathTokens) > 0:
-                self._setChildItem(topItem, pathTokens, path, cache_path, editable, status)
+                self._setChildItem(topItem, pathTokens, path, cache_path, iotype, editable, status)
 
         self.sortItems(self.section("node"), QtCore.Qt.AscendingOrder)
         self.expandAll()
@@ -210,7 +212,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         return None
 
 
-    def _setChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem, editable, status):
+    def _setChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem, iotype, editable, status):
 
         try:
             nextToken = restTokens.pop(0)
@@ -225,11 +227,12 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             self.setStatus(childItem, cachePathItem, editable, status)
 
         if len(restTokens) > 0:
-            self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem, editable, status)
+            self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem, iotype, editable, status)
 
         else:
             childItem.setText(self.section("cache_path"), cachePathItem)
             childItem.setToolTip(self.section("cache_path"), cachePathItem)
+            childItem.setText(self.section("iotype"), iotype)
             childItem.setText(self.section("status"), status)
 
 

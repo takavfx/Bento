@@ -8,12 +8,16 @@ Define file for Cache Manager Tool.
 
 ## Define Cache Nodes to deal with this script.
 CACHE_NODES = [
-    {"name":"file", "parmName":"file"},
-    {"name":"filecache", "parmName":"file"},
-    {"name":"alembic", "parmName":"fileName"},
-    {"name":"alembicarchive", "parmName":"fileName"},
-    {"name":"dopio", "parmName":"file"},
-
+    {"name":"file",             "parmName":"file",            "iotype":["both", "filemode", [1], [2]]},
+    {"name":"filecache",        "parmName":"file",            "iotype":["both", "loadfromdisk", [True], [False]]},
+    {"name":"alembic",          "parmName":"fileName",        "iotype":["read"]},
+    {"name":"alembicarchive",   "parmName":"fileName",        "iotype":["read"]},
+    {"name":"dopio",            "parmName":"file",            "iotype":["both", "loadfromdisk", [True], [False]]},
+    {"name":"geometry",         "parmName":"sopoutput",       "iotype":["write"]},
+    {"name":"rop_geometry",     "parmName":"sopoutput",       "iotype":["write"]},
+    {"name":"alembic",          "parmName":"filename",        "iotype":["write"]},
+    {"name":"rop_alembic",      "parmName":"filename",        "iotype":["write"]},
+    {"name":"dopnet",           "parmName":"playfilesname",   "iotype":["both", "isplayer", [], []]},
 ]
 
 CHILDNODES_EXCEPTION = [

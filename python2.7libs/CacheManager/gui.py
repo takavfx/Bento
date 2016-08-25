@@ -63,6 +63,9 @@ class CacheManager(QtGui.QWidget):
         ## Add Edit Menu
         self._createEditMenu()
 
+        ## Add View Menu
+        self._createViewMenu()
+        
         ## Add About Menu
         self._createAboutMenu()
         toolbarLayout.addWidget(self.menuBar)
@@ -103,12 +106,19 @@ class CacheManager(QtGui.QWidget):
         edit_menu = QtGui.QMenu(self)
 
         reloadAction = edit_menu.addAction("Reload")
-        reloadAction.setShortcut("Ctrl+R")
+        reloadAction.setShortcuts("Ctrl+R")
         self.addAction(reloadAction)
         reloadAction.triggered.connect(self.reloadButtonTriggered)
 
         edit_action = self.menuBar.addAction("Edit")
         edit_action.setMenu(edit_menu)
+
+    def _createViewMenu(self):
+
+        view_menu = QtGui.QMenu(self)
+
+        view_action = self.menuBar.addAction("View")
+        view_action.setMenu(view_menu)
 
     def _createAboutMenu(self):
 
@@ -116,7 +126,6 @@ class CacheManager(QtGui.QWidget):
 
         openGitHubAction = QtGui.QAction("Bento on GitHub", self)
         openGitHubAction.triggered.connect(self.gitHubButtonTriggered)
-        # load_menu.addAction(openGitHubAction)
 
         about_menu.addAction(openGitHubAction)
         about_action = self.menuBar.addAction("About")

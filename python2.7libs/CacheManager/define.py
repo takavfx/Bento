@@ -17,7 +17,8 @@ CACHE_NODES = [
     {"name":"rop_geometry",     "parmName":"sopoutput",       "iotype":["write"]},
     {"name":"alembic",          "parmName":"filename",        "iotype":["write"]},
     {"name":"rop_alembic",      "parmName":"filename",        "iotype":["write"]},
-    {"name":"dopnet",           "parmName":"playfilesname",   "iotype":["both", "isplayer", [], []]},
+    {"name":"dopnet",           "parmName":"playfilesname",   "iotype":["both", "isplayer", [None], [None]]},
+    {"name":"vm_geo_file",      "parmName":"file",            "iotype":["read"]},
 ]
 
 CHILDNODES_EXCEPTION = [

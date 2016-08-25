@@ -40,12 +40,6 @@ class CacheManager(QtGui.QWidget):
     def __init__(self, parent=None):
         super(CacheManager, self).__init__()
 
-        self.UI = None
-        loader = QtUiTools.QUiLoader()
-        ui_file = QtCore.QFile(self.UIPATH)
-        ui_file.open(QtCore.QFile.ReadOnly)
-        self.UI = loader.load(ui_file)
-
         self.initSettings()
 
 
@@ -55,7 +49,7 @@ class CacheManager(QtGui.QWidget):
 
     def initGUI(self):
 
-        toolbarLayout = self.UI.toolbarLayout
+        layout = QtGui.QVBoxLayout()
 
         ## Create Menu Bar
         self._createMenuBar()
@@ -65,17 +59,15 @@ class CacheManager(QtGui.QWidget):
 
         ## Add View Menu
         self._createViewMenu()
-        
+
         ## Add About Menu
         self._createAboutMenu()
-        toolbarLayout.addWidget(self.menuBar)
+        layout.addWidget(self.menuBar)
 
         self.cacheTreeWidget = self._createCacheTree()
-        treeWidgetLayout = self.UI.treeWidgetLayout
-        treeWidgetLayout.addWidget(self.cacheTreeWidget)
+        # self.cacheTreeWidget.setContentsMargins(0,0,0,0)
+        layout.addWidget(self.cacheTreeWidget)
 
-        layout = QtGui.QVBoxLayout()
-        layout.addWidget(self.UI)
         self.setLayout(layout)
 
 
@@ -106,26 +98,53 @@ class CacheManager(QtGui.QWidget):
         edit_menu = QtGui.QMenu(self)
 
         reloadAction = edit_menu.addAction("Reload")
-        reloadAction.setShortcuts("Ctrl+R")
+        reloadAction.setShortcuts(("Ctrl+R", "F5"))
         self.addAction(reloadAction)
-        reloadAction.triggered.connect(self.reloadButtonTriggered)
+        reloadAction.triggered.connect(self._reloadButtonTriggered)
 
         edit_action = self.menuBar.addAction("Edit")
         edit_action.setMenu(edit_menu)
+
 
     def _createViewMenu(self):
 
         view_menu = QtGui.QMenu(self)
 
+        self.viewActionGroup = QtGui.QActionGroup(self)
+
+        showRWaction = view_menu.addAction("Toggle R/W")
+        showRWaction.setShortcut("Ctrl+E")
+        self.addAction(showRWaction)
+        showRWaction.triggered.connect(self._showRwButtonTriggered)
+
+        view_menu.addSeparator()
+
+        self.bothNodesAction = view_menu.addAction("Both Nodes")
+        self.bothNodesAction.setCheckable(True)
+        self.bothNodesAction.setChecked(True)
+        self.bothNodesAction.triggered.connect(self._showBothNodes)
+        self.viewActionGroup.addAction(self.bothNodesAction)
+
+        self.readNodesOnlyAction = view_menu.addAction("Read Nodes Only")
+        self.readNodesOnlyAction.setCheckable(True)
+        self.readNodesOnlyAction.triggered.connect(self._showReadNodesOnly)
+        self.viewActionGroup.addAction(self.readNodesOnlyAction)
+
+        self.writeNodesOnlyAction = view_menu.addAction("Write Nodes Only")
+        self.writeNodesOnlyAction.setCheckable(True)
+        self.writeNodesOnlyAction.triggered.connect(self._showWriteNodesOnly)
+        self.viewActionGroup.addAction(self.writeNodesOnlyAction)
+
         view_action = self.menuBar.addAction("View")
         view_action.setMenu(view_menu)
+
 
     def _createAboutMenu(self):
 
         about_menu = QtGui.QMenu(self)
 
         openGitHubAction = QtGui.QAction("Bento on GitHub", self)
-        openGitHubAction.triggered.connect(self.gitHubButtonTriggered)
+        openGitHubAction.triggered.connect(self._gitHubButtonTriggered)
 
         about_menu.addAction(openGitHubAction)
         about_action = self.menuBar.addAction("About")
@@ -136,12 +155,36 @@ class CacheManager(QtGui.QWidget):
         return cacheWidget.cacheTreeWidget()
 
 
-    def reloadButtonTriggered(self):
+    def _reloadButtonTriggered(self):
         self.cacheTreeWidget.reload()
+        checked_action = self.viewActionGroup.checkedAction()
+        print checked_action
+        if checked_action.text() == "Read Nodes Only":
+            self.cacheTreeWidget.showNodesToggle("read")
+            
+        elif checked_action.text() == "Write Nodes Only":
+            self.cacheTreeWidget.showNodesToggle("write")
 
 
-    def gitHubButtonTriggered(self):
+    def _showRwButtonTriggered(self):
+        self.cacheTreeWidget.switchRwVisible()
+
+
+    def _showBothNodes(self):
+        self.cacheTreeWidget.showNodesToggle("both")
+
+
+    def _showReadNodesOnly(self):
+        self.cacheTreeWidget.showNodesToggle("read")
+
+
+    def _showWriteNodesOnly(self):
+        self.cacheTreeWidget.showNodesToggle("write")
+
+
+    def _gitHubButtonTriggered(self):
         webbrowser.open('http://github.com/takavfx/Bento')
+
 
 
 def main(launch_type=""):

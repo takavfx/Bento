@@ -36,18 +36,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
     mouseReleased = QtCore.Signal(QtCore.QPoint)
     keyPressed = QtCore.Signal(QtGui.QKeyEvent)
 
-
-
-    HEADER_SETTING = [
-        { "key": "node",           "display": "Node",           "width": 200,  "visible": True},
-        { "key": "cache_path",     "display": "Cache Path",     "width": 300,  "visible": True},
-        { "key": "env",            "display": "Env",            "width": 50,   "visible": False},
-        { "key": "iotype",         "display": "R/W",            "width": 70,   "visible": True},
-        { "key": "status",         "display": "Status",         "width": 50,   "visible": True},
-        { "key": "expanded_path",  "display": "Expanded path",  "width": 200,  "visible": False},
-        { "key": "color",          "display": "Color",          "width": None, "visible": False},
-    ]
-
+    HEADER_SETTING = Define.HEADER_SETTING
 
     def __init__(self, parent=None):
         super(cacheTreeWidget, self).__init__(parent)
@@ -157,7 +146,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         # Debug
         if Define.DEBUG_MODE:
             debug = QtGui.QAction("Debug", self)
-            debug.triggered.connect(partial(self.getNodePath, currentItem))
+            debug.triggered.connect(self.debugfunc)
 
             cellMenu.addAction(debug)
 
@@ -176,7 +165,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         for node in self._cache_nodes:
             path       = node.get("node_path")
             cache_path = node.get("cache_path")
-            iotype     = node.get("iotype")
+            rwtype     = node.get("rwtype")
             editable   = node.get("editable")
             status     = node.get("status")
 
@@ -194,7 +183,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
                 topItem = QtGui.QTreeWidgetItem(rootItem, [topToken])
 
             if len(pathTokens) > 0:
-                self._setChildItem(topItem, pathTokens, path, cache_path, iotype, editable, status)
+                self._setChildItem(topItem, pathTokens, path, cache_path, rwtype, editable, status)
 
         self.sortItems(self.section("node"), QtCore.Qt.AscendingOrder)
         self.expandAll()
@@ -212,7 +201,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         return None
 
 
-    def _setChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem, iotype, editable, status):
+    def _setChildItem(self, parentItem, restTokens, nodePathItem, cachePathItem, rwtype, editable, status):
 
         try:
             nextToken = restTokens.pop(0)
@@ -227,13 +216,14 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             self.setStatus(childItem, cachePathItem, editable, status)
 
         if len(restTokens) > 0:
-            self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem, iotype, editable, status)
+            self._setChildItem(childItem, restTokens, nodePathItem, cachePathItem, rwtype, editable, status)
 
         else:
             childItem.setText(self.section("cache_path"), cachePathItem)
             childItem.setToolTip(self.section("cache_path"), cachePathItem)
-            childItem.setText(self.section("iotype"), iotype)
+            childItem.setText(self.section("rwtype"), rwtype)
             childItem.setText(self.section("status"), status)
+            childItem.setText(self.section("editable"), str(editable))
 
 
     def setStatus(self, treeItem, cachePathItem, editable, status):
@@ -241,19 +231,23 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             treeItem.setHidden(True)
         if status == "bypassed":
             # treeItem.setForeground(self.section("node"),
-            #                         QtGui.QBrush(QtGui.QColor("#ecdd16")))
+            #                         QtGui.QBrush(QtGui.QColor(Define.BYPASSED_COLOR)))
             treeItem.setForeground(self.section("cache_path"),
-                                    QtGui.QBrush(QtGui.QColor("#ecdd16")))
+                                    QtGui.QBrush(QtGui.QColor(Define.BYPASSED_COLOR)))
+            treeItem.setForeground(self.section("rwtype"),
+                                    QtGui.QBrush(QtGui.QColor(Define.BYPASSED_COLOR)))
             treeItem.setForeground(self.section("status"),
-                                    QtGui.QBrush(QtGui.QColor("#ecdd16")))
+                                    QtGui.QBrush(QtGui.QColor(Define.BYPASSED_COLOR)))
 
         if status == "error":
             # treeItem.setForeground(self.section("node"),
-            #                         QtGui.QBrush(QtGui.QColor("#ec1616")))
+            #                         QtGui.QBrush(QtGui.QColor(Define.ERRORS_COLOR)))
             treeItem.setForeground(self.section("cache_path"),
-                                    QtGui.QBrush(QtGui.QColor("#ec1616")))
+                                    QtGui.QBrush(QtGui.QColor(Define.ERRORS_COLOR)))
+            treeItem.setForeground(self.section("rwtype"),
+                                    QtGui.QBrush(QtGui.QColor(Define.ERRORS_COLOR)))
             treeItem.setForeground(self.section("status"),
-                                    QtGui.QBrush(QtGui.QColor("#fe2a2a")))
+                                    QtGui.QBrush(QtGui.QColor(Define.ERRORS_COLOR)))
 
 
     def _replaceCacheFile(self, treeItem):
@@ -346,11 +340,61 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         else:
             return True
 
+
+    def switchHeaderVisible(self, idx):
+
+        visible = self.isColumnHidden(idx)
+
+        if visible:
+            self.showColumn(idx)
+
+        else:
+            self.hideColumn(idx)
+
+
+    def switchRwVisible(self):
+        self.switchHeaderVisible(self.section("rwtype"))
+
+
+    def showNodesToggle(self, rwtype):
+        ritems = self.findItems("read", QtCore.Qt.MatchExactly | QtCore.Qt.MatchRecursive, self.section("rwtype"))
+        witems = self.findItems("write", QtCore.Qt.MatchExactly | QtCore.Qt.MatchRecursive, self.section("rwtype"))
+
+        for ritem in ritems:
+
+            if ritem.text(self.section("editable")) == "False":
+                continue
+
+            if rwtype == "read":
+                ritem.setHidden(False)
+            elif rwtype == "write":
+                ritem.setHidden(True)
+            elif rwtype == "both":
+                ritem.setHidden(False)
+
+        for witem in witems:
+
+            if witem.text(self.section("editable")) == "False":
+                continue
+
+            if rwtype == "read":
+                    witem.setHidden(True)
+            elif rwtype == "write":
+                    witem.setHidden(False)
+            elif rwtype == "both":
+                    witem.setHidden(False)
+
+        self.showNodesStatus = rwtype
+
+
     def reload(self):
         self.clear()
         self._cache_nodes = core.houManager.getCacheList()
         self.setData()
 
+
+    def debugfunc(self):
+        print "test"
 
 
     def makeListByDictKey(self, key, listOfDict, default = None):

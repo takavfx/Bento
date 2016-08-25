@@ -37,7 +37,7 @@ class houManager(object):
             for item in Define.CACHE_NODES:
 
                 node_type = item.get("name")
-                iotype    = item.get("iotype")
+                rwtype    = item.get("rwtype")
 
                 if node.type().name().lower() == node_type:
 
@@ -54,7 +54,7 @@ class houManager(object):
                     eachNode_dict["env"]            = self.analizeEnv(cache_path)
                     eachNode_dict["expanded_path"]  = evalCachePath
                     eachNode_dict["color"]          = node.color().rgb()
-                    eachNode_dict["iotype"]         = self.setIoType(node_path, iotype, node_cat)
+                    eachNode_dict["rwtype"]         = self.setIoType(node_path, rwtype, node_cat)
                     eachNode_dict["editable"]       = self.isEditable(node_path)
                     eachNode_dict["status"]         = self.setStatus(node, node_cat)
 
@@ -146,63 +146,30 @@ class houManager(object):
 
 
     @classmethod
-    def setIoType(self, path, iotype, node_cat):
+    def setIoType(self, path, rwtype, node_cat):
 
         if node_cat == "Driver":
             return "write"
 
-        if iotype[0] == "read":
-            return iotype[0]
+        if rwtype[0] == "read":
+            return rwtype[0]
 
-        elif iotype[0] == "write":
-            return iotype[0]
+        elif rwtype[0] == "write":
+            return rwtype[0]
 
-        elif iotype[0] == "both":
+        elif rwtype[0] == "both":
 
-            parm = path + '/' + iotype[1]
+            parm = path + '/' + rwtype[1]
             switch = hou.evalParm(parm)
 
-            if switch in iotype[2]:
+            if switch in rwtype[2]:
                 return "read"
 
-            elif switch in iotype[3]:
+            elif switch in rwtype[3]:
                 return "write"
 
             else:
                 return "both"
-
-
-
-#-------------------------------------------------------------------------------
-# OS file management class
-#-------------------------------------------------------------------------------
-class fileManager(object):
-    """OS file management class
-    """
-    def __init__(self):
-        super(fileManager, self).__init__()
-
-
-    def copy(self, filepath, remove = False):
-        pass
-
-
-    def copyFile(self, filepath, remove = False):
-        pass
-
-
-    def copyDir(self, dir, remove = False):
-        pass
-
-
-    def fileCheck(self, filepath):
-        pass
-
-
-
-#-------------------------------------------------------------------------------
-# Other useful methods
-#-------------------------------------------------------------------------------
 
 
 

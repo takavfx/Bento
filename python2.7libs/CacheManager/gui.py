@@ -65,8 +65,8 @@ class CacheManager(QtGui.QWidget):
         layout.addWidget(self.menuBar)
 
         self.cacheTreeWidget = self._createCacheTree()
-        # self.cacheTreeWidget.setContentsMargins(0,0,0,0)
         layout.addWidget(self.cacheTreeWidget)
+        layout.setContentsMargins(0,0,0,0)
 
         self.setLayout(layout)
 

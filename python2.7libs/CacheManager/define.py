@@ -56,12 +56,13 @@ MENU_RELOAD = "Reload"
 
 ## Listed CHACHE_NODES node has children which should be got rid of as default.
 NODES_EXCEPTION = [
+    "cam",
     "light",
     "hlight",
     "ambient",
     "indirectlight",
     "arnold_light",
-    "cam",
+    "popobject",
     "testgeometry_pighead",
     "testgeometry_rubbertoy",
     "testgeometry_squab",

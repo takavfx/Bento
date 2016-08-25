@@ -10,17 +10,18 @@ BYPASSED_COLOR = "#ecdd16"
 
 ## Define Cache Nodes to deal with this script.
 CACHE_NODES = [
-    {"name":"file",             "parmName":"file",            "rwtype":["both", "filemode", [1], [2]]},
-    {"name":"filecache",        "parmName":"file",            "rwtype":["both", "loadfromdisk", [True], [False]]},
-    {"name":"alembic",          "parmName":"fileName",        "rwtype":["read"]},
-    {"name":"alembicarchive",   "parmName":"fileName",        "rwtype":["read"]},
-    {"name":"dopio",            "parmName":"file",            "rwtype":["both", "loadfromdisk", [True], [False]]},
-    {"name":"geometry",         "parmName":"sopoutput",       "rwtype":["write"]},
-    {"name":"rop_geometry",     "parmName":"sopoutput",       "rwtype":["write"]},
-    {"name":"alembic",          "parmName":"filename",        "rwtype":["write"]},
-    {"name":"rop_alembic",      "parmName":"filename",        "rwtype":["write"]},
-    {"name":"dopnet",           "parmName":"playfilesname",   "rwtype":["both", "isplayer", [None], [None]]},
-    {"name":"vm_geo_file",      "parmName":"file",            "rwtype":["read"]},
+    {"name":"file",            "cat":"Sop",      "parmName":"file",            "rwtype":["both", "filemode", [1], [2]]},
+    {"name":"filecache",       "cat":"Sop",      "parmName":"file",            "rwtype":["both", "loadfromdisk", [True], [False]]},
+    {"name":"alembic",         "cat":"Sop",      "parmName":"fileName",        "rwtype":["read"]},
+    {"name":"alembicarchive",  "cat":"Object",   "parmName":"fileName",        "rwtype":["read"]},
+    {"name":"dopio",           "cat":"Sop",      "parmName":"file",            "rwtype":["both", "loadfromdisk", [True], [False]]},
+    {"name":"geometry",        "cat":"Driver",   "parmName":"sopoutput",       "rwtype":["write"]},
+    {"name":"rop_geometry",    "cat":"Sop",      "parmName":"sopoutput",       "rwtype":["write"]},
+    {"name":"alembic",         "cat":"Driver",   "parmName":"filename",        "rwtype":["write"]},
+    {"name":"rop_alembic",     "cat":"Sop",      "parmName":"filename",        "rwtype":["write"]},
+    {"name":"dopnet",          "cat":"Object",   "parmName":"playfilesname",   "rwtype":["both", "isplayer", [None], [None]]},
+    {"name":"dopnet",          "cat":"Sop",      "parmName":"playfilesname",   "rwtype":["both", "isplayer", [None], [None]]},
+    {"name":"vm_geo_file",     "cat":"Shop",     "parmName":"file",            "rwtype":["read"]},
 ]
 
 CHILDNODES_EXCEPTION = [

@@ -44,8 +44,8 @@ class houManager(object):
                     eachNode_dict     = {}
                     node_path         = node.path()
                     node_type         = node.type().name().lower()
-                    cache_path        = self.unexpStrPath(node_path, node_type)
                     node_cat          = node.type().category().name()
+                    cache_path        = self.unexpStrPath(node_path, node_type, node_cat)
                     evalCachePath     = self.evalStrPath(node_path, node_type)
 
                     eachNode_dict["name"]           = node.name()
@@ -64,25 +64,39 @@ class houManager(object):
 
         return current_cache_nodes
 
-    @classmethod
-    def unexpStrPath(self, path, opType):
-        try:
-            for item in Define.CACHE_NODES:
-                if item.get("name") == opType:
-                    parmName = item.get("parmName")
 
+    @classmethod
+    def unexpStrPath(self, path, node_type, node_cat):
+
+        for item in Define.CACHE_NODES:
+            print item.get("cat")
+            print node_cat
+            # name = item.get("name")
+            # print node_type + '======'
+            if not node_cat == item.get("cat"):
+                continue
+
+            if node_type == item.get("name"):
+                # print node_type
+                parmName = item.get("parmName")
+                print parmName + "xxxxx"
+                break
+
+
+        try:
             parmPath = path + '/' + parmName
             unExpPath = hou.parm(parmPath).unexpandedString()
-
             return unExpPath
+
         except:
-            return None
+            return "Error: definition error"
+
 
     @classmethod
-    def evalStrPath(self, path, opType):
+    def evalStrPath(self, path, node_type):
         try:
             for item in Define.CACHE_NODES:
-                if item.get("name") == opType:
+                if item.get("name") == node_type:
                     parmName = item.get("parmName")
 
             parmPath = path + '/' + parmName
@@ -91,6 +105,7 @@ class houManager(object):
             return evalPath
         except:
             return None
+
 
     @classmethod
     def analizeEnv(self, path):
@@ -104,6 +119,7 @@ class houManager(object):
                 return pathTokens[0]
         except:
             return None
+
 
     @classmethod
     def isEditable(self, path):

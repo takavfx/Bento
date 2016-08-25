@@ -158,10 +158,10 @@ class CacheManager(QtGui.QWidget):
     def _reloadButtonTriggered(self):
         self.cacheTreeWidget.reload()
         checked_action = self.viewActionGroup.checkedAction()
-        print checked_action
+
         if checked_action.text() == "Read Nodes Only":
             self.cacheTreeWidget.showNodesToggle("read")
-            
+
         elif checked_action.text() == "Write Nodes Only":
             self.cacheTreeWidget.showNodesToggle("write")
 

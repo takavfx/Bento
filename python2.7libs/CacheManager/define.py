@@ -10,23 +10,27 @@ BYPASSED_COLOR = "#ecdd16"
 
 ## Define Cache Nodes to deal with this script.
 CACHE_NODES = [
-    {"name":"file",            "cat":"Sop",      "parmName":"file",            "rwtype":["both", "filemode", [1], [2]]},
-    {"name":"filecache",       "cat":"Sop",      "parmName":"file",            "rwtype":["both", "loadfromdisk", [True], [False]]},
-    {"name":"alembic",         "cat":"Sop",      "parmName":"fileName",        "rwtype":["read"]},
-    {"name":"alembicarchive",  "cat":"Object",   "parmName":"fileName",        "rwtype":["read"]},
-    {"name":"dopio",           "cat":"Sop",      "parmName":"file",            "rwtype":["both", "loadfromdisk", [True], [False]]},
-    {"name":"geometry",        "cat":"Driver",   "parmName":"sopoutput",       "rwtype":["write"]},
-    {"name":"rop_geometry",    "cat":"Sop",      "parmName":"sopoutput",       "rwtype":["write"]},
-    {"name":"alembic",         "cat":"Driver",   "parmName":"filename",        "rwtype":["write"]},
-    {"name":"rop_alembic",     "cat":"Sop",      "parmName":"filename",        "rwtype":["write"]},
-    {"name":"dopnet",          "cat":"Object",   "parmName":"playfilesname",   "rwtype":["both", "isplayer", [None], [None]]},
-    {"name":"dopnet",          "cat":"Sop",      "parmName":"playfilesname",   "rwtype":["both", "isplayer", [None], [None]]},
-    {"name":"vm_geo_file",     "cat":"Shop",     "parmName":"file",            "rwtype":["read"]},
+    { "name":"alembic",         "cat":"Driver",   "parmName":"filename",        "rwtype":["write"]},
+    { "name":"alembic",         "cat":"Sop",      "parmName":"fileName",        "rwtype":["read"]},
+    { "name":"alembicarchive",  "cat":"Object",   "parmName":"fileName",        "rwtype":["read"]},
+    { "name":"dopio",           "cat":"Sop",      "parmName":"file",            "rwtype":["both", "loadfromdisk", [True], [False]]},
+    { "name":"dopnet",          "cat":"Object",   "parmName":"playfilesname",   "rwtype":["both", "isplayer", [None], [None]]},
+    { "name":"dopnet",          "cat":"Sop",      "parmName":"playfilesname",   "rwtype":["both", "isplayer", [None], [None]]},
+    { "name":"file",            "cat":"Sop",      "parmName":"file",            "rwtype":["both", "filemode", [1], [2]]},
+    { "name":"filecache",       "cat":"Sop",      "parmName":"file",            "rwtype":["both", "loadfromdisk", [True], [False]]},
+    # { "name":"gasupres",        "cat":"Dop",      "parmName":"lowresfile",      "rwtype":["read"]},
+    { "name":"geometry",        "cat":"Driver",   "parmName":"sopoutput",       "rwtype":["write"]},
+    { "name":"mdd",             "cat":"Sop",      "parmName":"file",            "rwtype":["read"]},
+    { "name":"rop_geometry",    "cat":"Sop",      "parmName":"sopoutput",       "rwtype":["write"]},
+    { "name":"rop_alembic",     "cat":"Sop",      "parmName":"filename",        "rwtype":["write"]},
+    { "name":"tableimport",     "cat":"Sop",      "parmName":"file",            "rwtype":["read"]},
+    { "name":"vm_geo_file",     "cat":"Shop",     "parmName":"file",            "rwtype":["read"]},
 ]
 
 CHILDNODES_EXCEPTION = [
-    "filecache",
     "dopio",
+    "filecache",
+    # "gasupres",
 ]
 
 DEBUG_MODE = False
@@ -64,6 +68,8 @@ NODES_EXCEPTION = [
     "indirectlight",
     "arnold_light",
     "popobject",
+    "shopnet",
+    "sopnet",
     "testgeometry_pighead",
     "testgeometry_rubbertoy",
     "testgeometry_squab",

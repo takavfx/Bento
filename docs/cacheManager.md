@@ -22,7 +22,6 @@
 | Node               | Parameter     |
 |:-------------------|:--------------|
 | Alembic            | File Name     |
-| Alembic Archive    | File name     |
 | Dop I/O            | Geometry File |
 | File               | Geometry File |
 | File Cache         | Geometry File |
@@ -30,11 +29,6 @@
 | ROP Alembic Driver | Alembic File  |
 | ROP Output Driver  | Output File   |
 | Table Import       | File          |
-
-### DOP
-| Node        | Parameter     |
-|:------------|:--------------|
-| Dop Network | Geometry File |
 
 ### ROP
 | Node     | Parameter    |
@@ -46,3 +40,9 @@
 | Node                    | Parameter     |
 |:-----------------------:|:-------------:|
 | Delayed Load Procedural | Geometry File |
+
+### Object
+| Node            | Parameter     |
+|:----------------|:--------------|
+| Alembic Archive | File name     |
+| Dop Network     | Geometry File |

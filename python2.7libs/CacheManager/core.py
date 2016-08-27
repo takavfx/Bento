@@ -69,19 +69,13 @@ class houManager(object):
     def unexpStrPath(self, path, node_type, node_cat):
 
         for item in Define.CACHE_NODES:
-            print item.get("cat")
-            print node_cat
-            # name = item.get("name")
-            # print node_type + '======'
+
             if not node_cat == item.get("cat"):
                 continue
 
             if node_type == item.get("name"):
-                # print node_type
                 parmName = item.get("parmName")
-                print parmName + "xxxxx"
                 break
-
 
         try:
             parmPath = path + '/' + parmName
@@ -135,12 +129,12 @@ class houManager(object):
                 except:
                     return True
 
-                for defNodes in Define.NODES_EXCEPTION:
-                    if node_type == defNodes:
+                for neNodes in Define.NODES_EXCEPTION:
+                    if node_type == neNodes:
                         return False
 
-                for defNodes in Define.CHILDNODES_EXCEPTION:
-                    if node_type == defNodes:
+                for ceNodes in Define.CHILDNODES_EXCEPTION:
+                    if node_type == ceNodes:
                         return False
 
             else:

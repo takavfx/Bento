@@ -38,7 +38,7 @@
 
 ### SHOP
 | Node                    | Parameter     |
-|:-----------------------:|:-------------:|
+|:------------------------|:--------------|
 | Delayed Load Procedural | Geometry File |
 
 ### Object

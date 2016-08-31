@@ -60,8 +60,6 @@ class houManager(object):
 
                     current_cache_nodes.append(eachNode_dict)
 
-        # print current_cache_nodes
-
         return current_cache_nodes
 
 

@@ -5,7 +5,8 @@
 ## Feature
 
 * List cache nodes scatted everywhere in Houdini scene.
-* Filter Read/Write and Multi type of nodes
+* Filter Read/Write and Multi type of nodes.
+* This tool is supported only above on Houdini 15.0.
 
 ## How to
 
@@ -30,6 +31,11 @@
 | ROP Output Driver  | Output File   |
 | Table Import       | File          |
 
+### DOP
+| Node       | Parameter    |
+|:-----------|:-------------|
+| Gas Up Res | Low Res File |
+
 ### ROP
 | Node     | Parameter    |
 |:---------|:-------------|
@@ -38,7 +44,7 @@
 
 ### SHOP
 | Node                    | Parameter     |
-|:-----------------------:|:-------------:|
+|:------------------------|:--------------|
 | Delayed Load Procedural | Geometry File |
 
 ### Object

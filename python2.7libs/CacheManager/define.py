@@ -18,7 +18,7 @@ CACHE_NODES = [
     { "name":"dopnet",          "cat":"Sop",      "parmName":"playfilesname",   "rwtype":["both", "isplayer", [None], [None]]},
     { "name":"file",            "cat":"Sop",      "parmName":"file",            "rwtype":["both", "filemode", [1], [2]]},
     { "name":"filecache",       "cat":"Sop",      "parmName":"file",            "rwtype":["both", "loadfromdisk", [True], [False]]},
-    # { "name":"gasupres",        "cat":"Dop",      "parmName":"lowresfile",      "rwtype":["read"]},
+    { "name":"gasupres::2.0",   "cat":"Dop",      "parmName":"lowresfile",      "rwtype":["read"]},
     { "name":"geometry",        "cat":"Driver",   "parmName":"sopoutput",       "rwtype":["write"]},
     { "name":"mdd",             "cat":"Sop",      "parmName":"file",            "rwtype":["read"]},
     { "name":"rop_geometry",    "cat":"Sop",      "parmName":"sopoutput",       "rwtype":["write"]},
@@ -30,7 +30,7 @@ CACHE_NODES = [
 CHILDNODES_EXCEPTION = [
     "dopio",
     "filecache",
-    # "gasupres",
+    "gasupres::2.0",
 ]
 
 DEBUG_MODE = False
@@ -69,7 +69,7 @@ NODES_EXCEPTION = [
     "arnold_light",
     "popobject",
     "shopnet",
-    "sopnet",
+    "solver",
     "testgeometry_pighead",
     "testgeometry_rubbertoy",
     "testgeometry_squab",

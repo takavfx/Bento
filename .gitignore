@@ -34,3 +34,7 @@
 # Ignore Specific File Types
 *.pyc
 *.DS_Store
+
+
+# Not ignore this file change
+*.gitignore

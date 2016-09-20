@@ -37,4 +37,4 @@
 
 
 # Not ignore this file change
-*.gitignore
+!*.gitignore

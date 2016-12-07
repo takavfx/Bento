@@ -2,7 +2,7 @@ Bento
 ====================
 
 ## Description
-Bento is a toolset for houdini.
+Bento is a toolset for Houdini.
 
 
 ## Feature

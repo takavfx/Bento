@@ -20,6 +20,10 @@ Bento is a toolset for Houdini.
 
 ![alt tag](docs/img/ss_cache_manager_0001.png)
 
+### Scripts
+
+* [Color Nodes(OnCreated)](docs/color-nodes.md)
+
 ## Install
 1. Clone or Download this repository to your place you want to download.
 2. Place this repository to houdini-accessible place.

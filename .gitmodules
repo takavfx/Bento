@@ -1,0 +1,3 @@
+[submodule "python2.7libs/hqt_style"]
+	path = python2.7libs/hqt_style
+	url = https://github.com/takavfx/hqt.git

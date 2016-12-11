@@ -22,11 +22,9 @@ reload(Define)
 import cacheWidget
 reload(cacheWidget)
 
-try:
-    import hqt.hqt as hqt
-    reload(hqt)
-except:
-    pass
+
+from hqt_style import hqt
+reload(hqt)
 
 
 class CacheManager(QtGui.QWidget):
@@ -66,6 +64,7 @@ class CacheManager(QtGui.QWidget):
 
         self.setLayout(layout)
 
+        self.setStyleSheet(hqt.get_h14_style())
 
     def _createMenuBar(self):
         """Helper method for the constructor.
@@ -181,13 +180,6 @@ class CacheManager(QtGui.QWidget):
     def _gitHubButtonTriggered(self):
         webbrowser.open('http://github.com/takavfx/Bento')
 
-
-
-def main(launch_type=""):
-    try:
-        return hqt.showUi(CacheManager())
-    except:
-        return CacheManager()
 
 #-------------------------------------------------------------------------------
 # EOF

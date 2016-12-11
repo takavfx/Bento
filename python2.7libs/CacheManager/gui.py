@@ -33,10 +33,6 @@ class CacheManager(QtGui.QWidget):
     """docstring for CacheManager"""
 
 
-    CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    UIPATH = CURRENT_DIR + "/ui/gui.ui"
-
-
     def __init__(self, parent=None):
         super(CacheManager, self).__init__()
 

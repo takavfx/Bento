@@ -22,9 +22,10 @@ reload(Define)
 import cacheWidget
 reload(cacheWidget)
 
-
-from hqt_style import hqt
-reload(hqt)
+try:
+    import hqt
+except:
+    pass
 
 
 class CacheManager(QtGui.QWidget):
@@ -64,7 +65,10 @@ class CacheManager(QtGui.QWidget):
 
         self.setLayout(layout)
 
-        self.setStyleSheet(hqt.get_h14_style())
+        try:
+            self.setStyleSheet(hqt.get_h14_style())
+        except:
+            pass
 
     def _createMenuBar(self):
         """Helper method for the constructor.

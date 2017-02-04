@@ -6,12 +6,20 @@ Managing cache tool.
 """
 #-------------------------------------------------------------------------------
 
-import os, sys
+import sys
 sys.dont_write_bytecode = True
-
+import os
 import webbrowser
-from PySide import QtCore, QtGui
-from PySide import QtUiTools
+
+import imp
+try:
+    imp.find_module('PySide2')
+    from PySide2.QtWidgets import *
+    from PySide2.QtGui import *
+    from PySide2.QtCore import *
+except ImportError:
+    from PySide.QtGui import *
+    from PySide.QtCore import *
 
 import hou
 
@@ -23,18 +31,13 @@ import cacheWidget
 reload(cacheWidget)
 
 try:
-    import hqt.hqt as hqt
-    reload(hqt)
+    import hqt
 except:
     pass
 
 
-class CacheManager(QtGui.QWidget):
+class CacheManager(QWidget):
     """docstring for CacheManager"""
-
-
-    CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-    UIPATH = CURRENT_DIR + "/ui/gui.ui"
 
 
     def __init__(self, parent=None):
@@ -49,7 +52,7 @@ class CacheManager(QtGui.QWidget):
 
     def initGUI(self):
 
-        layout = QtGui.QVBoxLayout()
+        layout = QVBoxLayout()
 
         ## Create Menu Bar
         self._createMenuBar()
@@ -70,16 +73,20 @@ class CacheManager(QtGui.QWidget):
 
         self.setLayout(layout)
 
+        try:
+            self.setStyleSheet(hqt.get_h14_style())
+        except:
+            pass
 
     def _createMenuBar(self):
         """Helper method for the constructor.
 
         Create the menu bar.
         """
-        self.menuBar = QtGui.QMenuBar()
+        self.menuBar = QMenuBar()
         self.menuBar.setFixedHeight(25)
 
-        # help_button = QtGui.QToolButton()
+        # help_button = QToolButton()
         # help_button.setFixedWidth(25)
         # help_button.setFixedHeight(25)
         # help_button.clicked.connect(self.showHelp)
@@ -90,12 +97,12 @@ class CacheManager(QtGui.QWidget):
         # help_button.setProperty("transparent", True);
         #
         # self.menuBar.setCornerWidget(help_button)
-        # self.menuBar.cornerWidget(QtCore.Qt.TopRightCorner)
+        # self.menuBar.cornerWidget(Qt.TopRightCorner)
 
 
     def _createEditMenu(self):
 
-        edit_menu = QtGui.QMenu(self)
+        edit_menu = QMenu(self)
 
         reloadAction = edit_menu.addAction("Reload")
         reloadAction.setShortcuts(("Ctrl+R", "F5"))
@@ -108,9 +115,9 @@ class CacheManager(QtGui.QWidget):
 
     def _createViewMenu(self):
 
-        view_menu = QtGui.QMenu(self)
+        view_menu = QMenu(self)
 
-        self.viewActionGroup = QtGui.QActionGroup(self)
+        self.viewActionGroup = QActionGroup(self)
 
         showRWaction = view_menu.addAction("Toggle R/W")
         showRWaction.setShortcut("Ctrl+E")
@@ -141,9 +148,9 @@ class CacheManager(QtGui.QWidget):
 
     def _createAboutMenu(self):
 
-        about_menu = QtGui.QMenu(self)
+        about_menu = QMenu(self)
 
-        openGitHubAction = QtGui.QAction("Bento on GitHub", self)
+        openGitHubAction = QAction("Bento on GitHub", self)
         openGitHubAction.triggered.connect(self._gitHubButtonTriggered)
 
         about_menu.addAction(openGitHubAction)
@@ -185,13 +192,6 @@ class CacheManager(QtGui.QWidget):
     def _gitHubButtonTriggered(self):
         webbrowser.open('http://github.com/takavfx/Bento')
 
-
-
-def main(launch_type=""):
-    try:
-        return hqt.showUi(CacheManager())
-    except:
-        return CacheManager()
 
 #-------------------------------------------------------------------------------
 # EOF

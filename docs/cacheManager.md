@@ -4,7 +4,7 @@
 
 ## Feature
 
-* List cache nodes scatted everywhere in Houdini scene.
+* List cache nodes scatterd everywhere in Houdini scene.
 * Filter Read/Write and Multi type of nodes.
 * This tool is supported only above on Houdini 15.0.
 

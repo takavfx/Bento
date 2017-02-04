@@ -8,13 +8,20 @@ Construct Cache Table widget with PySide.GtGui.
 
 import sys
 sys.dont_write_bytecode = True
-
 import os
 import re
 import platform
 from functools import partial
 
-from PySide import QtCore, QtGui
+import imp
+try:
+    imp.find_module('PySide2')
+    from PySide2.QtWidgets import *
+    from PySide2.QtGui import *
+    from PySide2.QtCore import *
+except ImportError:
+    from PySide.QtGui import *
+    from PySide.QtCore import *
 
 import hou
 
@@ -30,11 +37,11 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 #-------------------------------------------------------------------------------
 # QTreeWidget for displaying Cache List
 #-------------------------------------------------------------------------------
-class cacheTreeWidget(QtGui.QTreeWidget):
+class cacheTreeWidget(QTreeWidget):
     """docstring for cacheTableView"""
 
     mouseReleased = QtCore.Signal(QtCore.QPoint)
-    keyPressed = QtCore.Signal(QtGui.QKeyEvent)
+    keyPressed = QtCore.Signal(QKeyEvent)
 
     HEADER_SETTING = Define.HEADER_SETTING
 
@@ -54,7 +61,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         self.setHeaderLabels(headerLabels)
         self.setSortingEnabled(True)
         self.setAlternatingRowColors(True)
-        self.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+        self.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self._setHeaderWidth()
         self._setHeaderVisible()
         self.setData()
@@ -102,14 +109,14 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         :param pos: <QtCore.QPoint> mouse click position.
         """
 
-        cellMenu = QtGui.QMenu(self)
+        cellMenu = QMenu(self)
         currentItem = self.itemAt(pos.x(), pos.y())
 
         if currentItem is None:
             return
 
         ## Replace Cache File
-        actionReplaceCacheFile = QtGui.QAction("Replace Cache File", self)
+        actionReplaceCacheFile = QAction("Replace Cache File", self)
         actionReplaceCacheFile.triggered.connect(partial(self._replaceCacheFile, currentItem))
 
         actionReplaceCacheFile.setEnabled(False)
@@ -121,7 +128,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         cellMenu.addSeparator() ##----------------------------------------------
 
         ## Forcus selected item
-        actionFocusThisNode = QtGui.QAction("Focus this node", self)
+        actionFocusThisNode = QAction("Focus this node", self)
         actionFocusThisNode.triggered.connect(partial(self.focusThisNode, currentItem))
 
         actionFocusThisNode.setEnabled(False)
@@ -133,11 +140,11 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         cellMenu.addSeparator() ##----------------------------------------------
 
-        actionExpandAll = QtGui.QAction("Expand all", self)
+        actionExpandAll = QAction("Expand all", self)
         actionExpandAll.triggered.connect(self.expandAll)
         cellMenu.addAction(actionExpandAll)
 
-        actionCollapseAll = QtGui.QAction("Collapse all", self)
+        actionCollapseAll = QAction("Collapse all", self)
         actionCollapseAll.triggered.connect(self.collapseAll)
         cellMenu.addAction(actionCollapseAll)
 
@@ -145,7 +152,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
 
         # Debug
         if Define.DEBUG_MODE:
-            debug = QtGui.QAction("Debug", self)
+            debug = QAction("Debug", self)
             debug.triggered.connect(self.debugfunc)
 
             cellMenu.addAction(debug)
@@ -180,7 +187,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             topItem = self.findChild(rootItem, topToken)
 
             if topItem is None:
-                topItem = QtGui.QTreeWidgetItem(rootItem, [topToken])
+                topItem = QTreeWidgetItem(rootItem, [topToken])
 
             if len(pathTokens) > 0:
                 self._setChildItem(topItem, pathTokens, path, cache_path, rwtype, editable, status)
@@ -212,7 +219,7 @@ class cacheTreeWidget(QtGui.QTreeWidget):
         childItem = self.findChild(parentItem, nextToken)
 
         if childItem is None:
-            childItem = QtGui.QTreeWidgetItem(parentItem, [nextToken])
+            childItem = QTreeWidgetItem(parentItem, [nextToken])
             self.setStatus(childItem, cachePathItem, editable, status)
 
         if len(restTokens) > 0:
@@ -231,23 +238,23 @@ class cacheTreeWidget(QtGui.QTreeWidget):
             treeItem.setHidden(True)
         if status == "bypassed":
             # treeItem.setForeground(self.section("node"),
-            #                         QtGui.QBrush(QtGui.QColor(Define.BYPASSED_COLOR)))
+            #                         QBrush(QColor(Define.BYPASSED_COLOR)))
             treeItem.setForeground(self.section("cache_path"),
-                                    QtGui.QBrush(QtGui.QColor(Define.BYPASSED_COLOR)))
+                                    QBrush(QColor(Define.BYPASSED_COLOR)))
             treeItem.setForeground(self.section("rwtype"),
-                                    QtGui.QBrush(QtGui.QColor(Define.BYPASSED_COLOR)))
+                                    QBrush(QColor(Define.BYPASSED_COLOR)))
             treeItem.setForeground(self.section("status"),
-                                    QtGui.QBrush(QtGui.QColor(Define.BYPASSED_COLOR)))
+                                    QBrush(QColor(Define.BYPASSED_COLOR)))
 
         if status == "error":
             # treeItem.setForeground(self.section("node"),
-            #                         QtGui.QBrush(QtGui.QColor(Define.ERRORS_COLOR)))
+            #                         QBrush(QColor(Define.ERRORS_COLOR)))
             treeItem.setForeground(self.section("cache_path"),
-                                    QtGui.QBrush(QtGui.QColor(Define.ERRORS_COLOR)))
+                                    QBrush(QColor(Define.ERRORS_COLOR)))
             treeItem.setForeground(self.section("rwtype"),
-                                    QtGui.QBrush(QtGui.QColor(Define.ERRORS_COLOR)))
+                                    QBrush(QColor(Define.ERRORS_COLOR)))
             treeItem.setForeground(self.section("status"),
-                                    QtGui.QBrush(QtGui.QColor(Define.ERRORS_COLOR)))
+                                    QBrush(QColor(Define.ERRORS_COLOR)))
 
 
     def _replaceCacheFile(self, treeItem):

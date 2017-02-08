@@ -40,15 +40,15 @@ CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 class cacheTreeWidget(QTreeWidget):
     """docstring for cacheTableView"""
 
-    mouseReleased = QtCore.Signal(QtCore.QPoint)
-    keyPressed = QtCore.Signal(QKeyEvent)
+    mouseReleased = Signal(QPoint)
+    keyPressed = Signal(QKeyEvent)
 
     HEADER_SETTING = Define.HEADER_SETTING
 
     def __init__(self, parent=None):
         super(cacheTreeWidget, self).__init__(parent)
         self.initSettings()
-        self.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
 
     def initSettings(self):
         self._cache_nodes = core.houManager.getCacheList()
@@ -106,7 +106,7 @@ class cacheTreeWidget(QTreeWidget):
     def showCellMenu(self, pos):
         """Create menu for right click on the tree widget and show.
 
-        :param pos: <QtCore.QPoint> mouse click position.
+        :param pos: <QPoint> mouse click position.
         """
 
         cellMenu = QMenu(self)
@@ -158,7 +158,7 @@ class cacheTreeWidget(QTreeWidget):
             cellMenu.addAction(debug)
 
 
-        cellMenu.exec_(self.mapToGlobal(QtCore.QPoint(pos.x(), pos.y() + self.header().height())))
+        cellMenu.exec_(self.mapToGlobal(QPoint(pos.x(), pos.y() + self.header().height())))
 
 
     def setData(self):
@@ -192,7 +192,7 @@ class cacheTreeWidget(QTreeWidget):
             if len(pathTokens) > 0:
                 self._setChildItem(topItem, pathTokens, path, cache_path, rwtype, editable, status)
 
-        self.sortItems(self.section("node"), QtCore.Qt.AscendingOrder)
+        self.sortItems(self.section("node"), Qt.AscendingOrder)
         self.expandAll()
         self.blockSignals(False)
         self._setHeaderWidth()
@@ -364,8 +364,8 @@ class cacheTreeWidget(QTreeWidget):
 
 
     def showNodesToggle(self, rwtype):
-        ritems = self.findItems("read", QtCore.Qt.MatchExactly | QtCore.Qt.MatchRecursive, self.section("rwtype"))
-        witems = self.findItems("write", QtCore.Qt.MatchExactly | QtCore.Qt.MatchRecursive, self.section("rwtype"))
+        ritems = self.findItems("read", Qt.MatchExactly | Qt.MatchRecursive, self.section("rwtype"))
+        witems = self.findItems("write", Qt.MatchExactly | Qt.MatchRecursive, self.section("rwtype"))
 
         for ritem in ritems:
 

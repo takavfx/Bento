@@ -9,10 +9,11 @@ Bento is a toolset for Houdini.
 
 ### Shelf tool
 
-![alt tag](docs/img/ss_shelf_tool_0002.png)
+![alt tag](docs/img/ss_shelf_tool.png)
 
 * [Cache Dependency](docs/cacheDependency.md)
 * [Creat Delayed Load Procedural](docs/create-dlp.md)
+* [Color Nodes](docs/color-nodes.md)
 
 ### Python Panel
 

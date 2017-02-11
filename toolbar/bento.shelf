@@ -8,6 +8,7 @@
   <toolshelf name="bento_shelf" label="Bento">
     <memberTool name="cr_cacheDendency"/>
     <memberTool name="create_dlp"/>
+    <memberTool name="color_nodes"/>
   </toolshelf>
 
   <tool name="cr_cacheDendency" label="cCDP" icon="SOP_file">
@@ -24,5 +25,10 @@ cacheDependency.main()
 reload(createDlp)
 
 createDlp.main()]]></script>
+  </tool>
+
+  <tool name="color_nodes" label="CNodes" icon="COP2_colorwheel">
+    <script scriptType="python"><![CDATA[import colornodes
+colornodes.run()]]></script>
   </tool>
 </shelfDocument>

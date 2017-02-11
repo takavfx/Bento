@@ -8,6 +8,7 @@
   <toolshelf name="bento_shelf" label="Bento">
     <memberTool name="cr_cacheDendency"/>
     <memberTool name="create_dlp"/>
+    <memberTool name="color_nodes"/>
   </toolshelf>
 
   <tool name="cr_cacheDendency" label="cCDP" icon="SOP_file">

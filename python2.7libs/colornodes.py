@@ -57,14 +57,7 @@ def run():
     if len(hou.selectedNodes()) is 0:
         nodes = hou.pwd().allSubChildren()
     else:
-        nodes = []
-        selected_nodes = hou.selectedNodes()
-        for node in selected_nodes:
-            children = node.allSubChildren()
-            print children
-            nodes.append(children)
-            print nodes
-            return
+        nodes = hou.selectedNodes()
 
     for node in nodes:
         node_type = node.type()

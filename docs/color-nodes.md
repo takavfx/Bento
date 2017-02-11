@@ -1,6 +1,13 @@
-# Cache Manager
+# Color Nodes
 
 ## Feature
+
+### Shelf Tool
+
+Color nodes when shelf-tool button clicked.
+If you have already selected nodes, this affects only for them.
+
+### OnCreated Script
 
 Color nodes when nodes are created.
 

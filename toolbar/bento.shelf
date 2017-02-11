@@ -26,4 +26,9 @@ reload(createDlp)
 
 createDlp.main()]]></script>
   </tool>
+
+  <tool name="color_nodes" label="CNodes" icon="COP2_colorwheel">
+    <script scriptType="python"><![CDATA[import colornodes
+colornodes.run()]]></script>
+  </tool>
 </shelfDocument>

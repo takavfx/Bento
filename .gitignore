@@ -39,6 +39,8 @@
 *.pyc
 *.DS_Store
 
+# Ignore Specific File
+bento_config.ini
 
 # Not ignore this file change
 !*.gitignore

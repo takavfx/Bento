@@ -7,6 +7,8 @@
 Color nodes when shelf-tool button clicked.
 If you have already selected nodes, this affects only for them.
 
+> Note: When you have selected nodes, it only affects them.
+
 ### OnCreated Script
 
 Color nodes when nodes are created.

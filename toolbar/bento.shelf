@@ -6,12 +6,19 @@
  a single file. -->
 
   <toolshelf name="bento_shelf" label="Bento">
-    <memberTool name="cr_cacheDendency"/>
-    <memberTool name="create_dlp"/>
-    <memberTool name="color_nodes"/>
+    <memberTool name="bento_createCacheDendency"/>
+    <memberTool name="bento_createDlp"/>
+    <memberTool name="bento_colorNodes"/>
   </toolshelf>
 
-  <tool name="cr_cacheDendency" label="cCDP" icon="SOP_file">
+  <tool name="bento_createDlp" label="cDLP" icon="OBJ_geo">
+    <script scriptType="python"><![CDATA[import createDlp
+reload(createDlp)
+
+createDlp.main()]]></script>
+  </tool>
+
+  <tool name="bento_createCacheDendency" label="cCDP" icon="SOP_file">
     <script scriptType="python"><![CDATA[import cacheDependency
 reload(cacheDependency)
 
@@ -20,14 +27,7 @@ cacheDependency.main()
 ]]></script>
   </tool>
 
-  <tool name="create_dlp" label="cDLP" icon="OBJ_geo">
-    <script scriptType="python"><![CDATA[import createDlp
-reload(createDlp)
-
-createDlp.main()]]></script>
-  </tool>
-
-  <tool name="color_nodes" label="CNodes" icon="COP2_colorwheel">
+  <tool name="bento_colorNodes" label="CNodes" icon="COP2_colorwheel">
     <script scriptType="python"><![CDATA[import colornodes
 colornodes.run()]]></script>
   </tool>

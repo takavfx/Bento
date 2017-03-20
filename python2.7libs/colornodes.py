@@ -1,10 +1,11 @@
-# -*- coding: utf-8 -*-
 #-------------------------------------------------------------------------------
 ## Description
 """
 This script for color nodes shelf tool and also used in OnCreated script.
 """
 #-------------------------------------------------------------------------------
+
+__version__ = "1.0.0"
 
 import hou
 

@@ -191,8 +191,3 @@ class CacheManager(QWidget):
 
     def _gitHubButtonTriggered(self):
         webbrowser.open('http://github.com/takavfx/Bento')
-
-
-#-------------------------------------------------------------------------------
-# EOF
-#-------------------------------------------------------------------------------

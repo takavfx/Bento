@@ -17,14 +17,18 @@ import hou
 from . import define as Define
 reload(Define)
 
+
 #-------------------------------------------------------------------------------
 # Core API to access to Houdini Datas
 #-------------------------------------------------------------------------------
 class houManager(object):
     """Core API to access to Houdini Datas
     """
+
+
     def __init__(self):
         super(houManager, self).__init__()
+
 
     @classmethod
     def getCacheList(self):
@@ -45,13 +49,13 @@ class houManager(object):
                     node_path         = node.path()
                     node_type         = node.type().name().lower()
                     node_cat          = node.type().category().name()
-                    cache_path        = self.unexpStrPath(node_path, node_type, node_cat)
-                    evalCachePath     = self.evalStrPath(node_path, node_type)
+                    cache_path        = self.getUnexpandedStringPath(node_path, node_type, node_cat)
+                    evalCachePath     = self.getEvalStringPath(node_path, node_type)
 
                     eachNode_dict["name"]           = node.name()
                     eachNode_dict["node_path"]      = node_path
                     eachNode_dict["cache_path"]     = cache_path
-                    eachNode_dict["env"]            = self.analizeEnv(cache_path)
+                    #eachNode_dict["env"]            = self.analizeValiables(cache_path)
                     eachNode_dict["expanded_path"]  = evalCachePath
                     eachNode_dict["color"]          = node.color().rgb()
                     eachNode_dict["rwtype"]         = self.setIoType(node_path, rwtype, node_cat)
@@ -64,8 +68,7 @@ class houManager(object):
 
 
     @classmethod
-    def unexpStrPath(self, path, node_type, node_cat):
-
+    def getUnexpandedStringPath(self, path, node_type, node_cat):
         for item in Define.CACHE_NODES:
 
             if not node_cat == item.get("cat"):
@@ -85,7 +88,7 @@ class houManager(object):
 
 
     @classmethod
-    def evalStrPath(self, path, node_type):
+    def getEvalStringPath(self, path, node_type):
         try:
             for item in Define.CACHE_NODES:
                 if item.get("name") == node_type:
@@ -100,7 +103,7 @@ class houManager(object):
 
 
     @classmethod
-    def analizeEnv(self, path):
+    def analizeValiables(self, path):
         try:
             obj = re.search("$", path)
 

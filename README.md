@@ -1,8 +1,8 @@
 Bento
 ====================
 
-[![Houdini Tools](https://img.shields.io/badge/Houdini-Tools-orange.svg)](https://img.shields.io/badge/Houdini-Tools-orange.svg)
-[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/RocketChat/Rocket.Chat/raw/master/LICENSE)
+[![Houdini Tools](https://img.shields.io/badge/Houdini-Tools-orange.svg?style=flat)](https://img.shields.io/badge/Houdini-Tools-orange.svg)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/takavfx/Bento/blob/develop/LICENSE.md)
 
 ## Description
 Bento is a toolset for Houdini.

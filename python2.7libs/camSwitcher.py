@@ -173,5 +173,5 @@ def main(launch_type=''):
 
     elif launch_type == 'floating':
         ui = CamSwitcherGUI()
-        ui.setParent(hou.ui.mainQtWindow(), Qt.Window)
+        ui.setParent(hou.ui.mainQtWindow(), QtCore.Qt.Window)
         ui.show()

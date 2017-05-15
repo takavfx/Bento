@@ -14,15 +14,11 @@
 
   <tool name="bento_createDlp" label="cDLP" icon="OBJ_geo">
     <script scriptType="python"><![CDATA[import createDlp
-reload(createDlp)
-
 createDlp.main()]]></script>
   </tool>
 
   <tool name="bento_createCacheDendency" label="cCDP" icon="SOP_file">
     <script scriptType="python"><![CDATA[import cacheDependency
-reload(cacheDependency)
-
 cacheDependency.main()
 
 ]]></script>

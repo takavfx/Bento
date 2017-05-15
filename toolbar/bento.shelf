@@ -9,6 +9,7 @@
     <memberTool name="bento_createCacheDendency"/>
     <memberTool name="bento_createDlp"/>
     <memberTool name="bento_colorNodes"/>
+    <memberTool name="bento_camSwitcher"/>
   </toolshelf>
 
   <tool name="bento_createDlp" label="cDLP" icon="OBJ_geo">
@@ -30,5 +31,10 @@ cacheDependency.main()
   <tool name="bento_colorNodes" label="CNodes" icon="COP2_colorwheel">
     <script scriptType="python"><![CDATA[import colornodes
 colornodes.run()]]></script>
+  </tool>
+
+  <tool name="bento_camSwitcher" label="CamS" icon="OBJ_camera">
+    <script scriptType="python"><![CDATA[import camSwitcher
+camSwitcher.main(launch_type='floating')]]></script>
   </tool>
 </shelfDocument>

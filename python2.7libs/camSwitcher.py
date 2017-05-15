@@ -15,27 +15,15 @@ sys.dont_write_bytecode = True
 
 from functools import partial
 
-import imp
-try:
-    imp.find_module('PySide2')
-    from PySide2.QtWidgets import *
-    from PySide2.QtGui import *
-    from PySide2.QtCore import *
 
-except ImportError:
-    from PySide.QtGui import *
-    from PySide.QtCore import *
+from hutil.Qt import QtWidgets
+from hutil.Qt import QtGui
+from hutil.Qt import QtCore
 
 import hou
 
-try:
-    import hqt.hqt as hqt
-    reload(hqt)
-except:
-    pass
 
-
-class CamSwitcherGUI(QWidget):
+class CamSwitcherGUI(QtWidgets.QWidget):
     """docstring for GUI"""
 
 
@@ -62,7 +50,7 @@ class CamSwitcherGUI(QWidget):
         self._createRefreshButton()
         self._createCamListLayout()
 
-        layout = QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.addLayout(self.buttonLayout)
         layout.addLayout(self.camListLayout)
         layout.setContentsMargins(0,0,0,0)
@@ -73,24 +61,24 @@ class CamSwitcherGUI(QWidget):
 
         self.resize(self._windowWidth, self._windowHeight)
 
-        self.setAttribute(Qt.WA_DeleteOnClose)
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
 
     def setSignals(self):
         self.refreshButton.clicked.connect(self.refreshCamList)
 
 
     def _createRefreshButton(self):
-        self.refreshButton = QPushButton()
+        self.refreshButton = QtWidgets.QPushButton()
         self.refreshButton.setText('Refresh')
         self.refreshButton.setFixedHeight(30)
 
-        self.buttonLayout = QVBoxLayout()
+        self.buttonLayout = QtWidgets.QVBoxLayout()
         self.buttonLayout.addWidget(self.refreshButton)
 
 
     def _createCamListLayout(self):
 
-        self.cam_listView = QListView()
+        self.cam_listView = QtWidgets.QListView()
         self.cam_listView.setAlternatingRowColors(True)
 
         model = camListModel(data = self.getCamList())
@@ -98,7 +86,7 @@ class CamSwitcherGUI(QWidget):
 
         self.cam_listView.clicked.connect(self.selectCam)
 
-        self.camListLayout = QVBoxLayout()
+        self.camListLayout = QtWidgets.QVBoxLayout()
         self.camListLayout.addWidget(self.cam_listView)
 
 
@@ -149,18 +137,18 @@ class CamSwitcherGUI(QWidget):
         self.setParent(None)
 
 
-class camListModel(QAbstractListModel):
+class camListModel(QtCore.QAbstractListModel):
     """docstring for camListModel"""
     def __init__(self, parent=None, data=None):
         super(camListModel, self).__init__(parent)
         self.__items = data
 
 
-    def rowCount(self, parent=QModelIndex()):
+    def rowCount(self, parent=QtCore.QModelIndex()):
         return len(self.__items)
 
 
-    def data(self, index, role = Qt.DisplayRole):
+    def data(self, index, role = QtCore.Qt.DisplayRole):
 
         if not index.isValid():
             return None
@@ -168,7 +156,7 @@ class camListModel(QAbstractListModel):
         if not 0 <= index.row() < len(self.__items):
             return None
 
-        if role == Qt.DisplayRole:
+        if role == QtCore.Qt.DisplayRole:
             return self.__items[index.row()].get("path")
 
         else:
@@ -176,7 +164,7 @@ class camListModel(QAbstractListModel):
 
 
     def flags(self, index):
-        return Qt.ItemIsSelectable | Qt.ItemIsEnabled
+        return QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled
 
 
 def main(launch_type=''):

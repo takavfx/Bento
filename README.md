@@ -17,6 +17,7 @@ Bento is a toolset for Houdini.
 * [Cache Dependency](docs/cacheDependency.md)
 * [Creat Delayed Load Procedural](docs/create-dlp.md)
 * [Color Nodes](docs/color-nodes.md)
+* [Cam Switcher](docs/camSwitcher.md)
 
 ### Python Panel
 

@@ -1,5 +1,7 @@
 # Cam Switcehr
 
+![](img/ss_cam_switcher_0001.png)
+
 ## Feature
 
 * List all cameras on floating window.

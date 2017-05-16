@@ -23,7 +23,6 @@ common_type_colors = {
     "output": (0.36, 0.36, 0.36),
 
     ### Blue: Disk Output ###
-    "df_alembic_export": (0, 0.4, 1),
     "PRT_ROPDriver": (0, 0.4, 1),
     "rop_geometry": (0, 0.4, 1),
     "rop_alembic": (0, 0.4, 1),

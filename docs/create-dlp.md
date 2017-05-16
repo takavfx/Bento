@@ -6,6 +6,11 @@
 2. Execute this tool.
 3. Select cache file such as BGEO cache.
 
+ or
+
+1. Execute this tool.
+2. Select cache file such as BGEO cache.
+
 ## Behaviour
 
 * Create Delayed Load Procedural SHOP and connect it to selected Geometry Network node.

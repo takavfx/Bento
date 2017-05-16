@@ -7,6 +7,8 @@ This script for color nodes shelf tool and also used in OnCreated script.
 
 __version__ = "1.0.0"
 
+#-------------------------------------------------------------------------------
+
 import hou
 
 manager_color = (0, 0.4, 1)
@@ -27,6 +29,7 @@ common_type_colors = {
     "rop_geometry": (0, 0.4, 1),
     "rop_alembic": (0, 0.4, 1),
     "ropnet": (0, 0.4, 1),
+    "heightfield_output": (0, 0.4, 1),
 
     ### Yellow: Disk Input ###
     "file": (1, 0.8, 0),
@@ -34,6 +37,7 @@ common_type_colors = {
     "filemerge": (1, 0.8, 0),
     "alembic": (1, 0.8, 0),
     "alembicarchive": (1, 0.8, 0),
+    "heightfield_file": (1, 0.8, 0),
 
     ### Purple Blue: Dop I/O ###
     "dopimport": (0.6, 0.6, 1),

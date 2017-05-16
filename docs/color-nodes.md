@@ -25,21 +25,22 @@ Color nodes when nodes are created.
 | output             |![](img/color-nodes/ss_color_nodes_output_0001.png) |
 
 
-| Blue:  Disk Output | Sample                                                   |
-|:-------------------|:---------------------------------------------------------|
-| rop_geometry       |![](img/color-nodes/ss_color_nodes_rop_alembic_0001.png)  |
-| rop_alembic        |![](img/color-nodes/ss_color_nodes_rop_geoemtry_0001.png) |
-| heightfield_output |![](img/color-nodes/ss_color_nodes_heightfield_output.png)|
+| Blue:  Disk Output | Sample                                                        |
+|:-------------------|:--------------------------------------------------------------|
+| rop_geometry       |![](img/color-nodes/ss_color_nodes_rop_alembic_0001.png)       |
+| rop_alembic        |![](img/color-nodes/ss_color_nodes_rop_geoemtry_0001.png)      |
+| heightfield_output |![](img/color-nodes/ss_color_nodes_heightfield_output_0001.png)|
 
 
 
-| Yellow: Disk Input  | Sample                                                 |
-|:--------------------|:-------------------------------------------------------|
-| file                |![](img/color-nodes/ss_color_nodes_file_0001.png)       |
-| filecache           |![](img/color-nodes/ss_color_nodes_filecache_0001.png)  |
-| filemerge           |![](img/color-nodes/ss_color_nodes_filemerge_0001.png)  |
-| alembic             |![](img/color-nodes/ss_color_nodes_alembic_0001.png)    |
-| heightfield_file    |![](img/color-nodes/ss_color_nodes_heightfield_file.png)|
+| Yellow: Disk Input  | Sample                                                       |
+|:--------------------|:-------------------------------------------------------------|
+| file                |![](img/color-nodes/ss_color_nodes_file_0001.png)             |
+| filecache           |![](img/color-nodes/ss_color_nodes_filecache_0001.png)        |
+| filemerge           |![](img/color-nodes/ss_color_nodes_filemerge_0001.png)        |
+| alembic             |![](img/color-nodes/ss_color_nodes_alembic_0001.png)          |
+| alembicxform        |![](img/color-nodes/ss_color_nodes_alembicxform_0001.png)     |
+| heightfield_file    |![](img/color-nodes/ss_color_nodes_heightfield_file_0001.png) |
 
 
 | Purple Blue: Dop I/O | Sample                                                      |

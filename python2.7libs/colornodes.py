@@ -36,7 +36,8 @@ common_type_colors = {
     "filecache": (1, 0.8, 0),
     "filemerge": (1, 0.8, 0),
     "alembic": (1, 0.8, 0),
-    "alembicarchive": (1, 0.8, 0),
+    "alembicarchive":  (1, 0.8, 0),
+    "alembicxform": (1, 0.8, 0),
     "heightfield_file": (1, 0.8, 0),
 
     ### Purple Blue: Dop I/O ###

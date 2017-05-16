@@ -5,35 +5,38 @@ This tool creates FileCache Nodes and ROP dependencies.
 """
 #-------------------------------------------------------------------------------
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
+
+#-------------------------------------------------------------------------------
+
+import hou
 
 def main():
-    seled_node_list = []
-    seled_node_list = hou.selectedNodes()
-    if len(seled_node_list) != 0:
-        createCacheDependency()
+    sel_nodes = []
+    sel_nodes = hou.selectedNodes()
+    if len(sel_nodes) != 0:
+        createCacheDependency(sel_nodes)
 
 
-def createCacheDependency():
+def createCacheDependency(sel_nodes):
 
-    count = 0
     created_geo_node_list = []
-    node_position = hou.Vector2(0, 0)
+    node_pos = hou.Vector2(0, 0)
 
-    for seled_node in seled_node_list:
+    for x, node in enumerate(sel_nodes):
 
-        if seled_node.type().name() != "filecache":
-            ### Create File Cache SOP Operation ###
-            filecache_node = seled_node.createOutputNode("filecache")
-            filecache_node.setName("cache_" + seled_node.name(),
+        if node.type().name() != "filecache":
+            ## Create File Cache SOP Operation
+            filecache_node = node.createOutputNode("filecache")
+            filecache_node.setName("cache_" + node.name(),
                 unique_name=True)
             filecache_node.setColor(hou.Color((1, 0.8, 0)))
             input_name = '`opinputpath("%s", 0)`' %filecache_node.path()
         else:
-            filecache_node = seled_node
-            input_name = '`opinputpath("%s", 0)`' %seled_node.path()
+            filecache_node = node
+            input_name = '`opinputpath("%s", 0)`' %node.path()
 
-        ### Create Geometry ROP Operation ###
+        ## Create Geometry ROP Operation
         geo_node = hou.node("/out").createNode("geometry")
         geo_node.setName(filecache_node.name())
         geo_node.setParms({
@@ -48,15 +51,14 @@ def createCacheDependency():
             })
         geo_node.setColor(hou.Color((0, 0.267, 0)))
 
-        ### Conncet nodes ###
-        if count != 0:
-            input_node = created_geo_node_list[count-1]
+        ## Conncet nodes
+        if x != 0:
+            input_node = created_geo_node_list[x-1]
             geo_node.setFirstInput(input_node)
 
-        ### Move created node to organise ###
-        geo_node.setPosition(node_position)
+        ## Move created node to organise
+        geo_node.setPosition(node_pos)
 
-        ### Update init value ###
-        count += 1
+        ## Update init value
         created_geo_node_list.append(geo_node)
-        node_position[1] += -1
+        node_pos[1] += -1

@@ -10,6 +10,7 @@
 !*.pl
 !*.py
 !*.cmd
+!*.xml
 
 # Text files
 !*.txt

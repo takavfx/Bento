@@ -1,6 +1,9 @@
 Bento
 ====================
 
+[![Houdini Tools](https://img.shields.io/badge/Houdini-Tools-orange.svg?style=flat)](https://img.shields.io/badge/Houdini-Tools-orange.svg)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/takavfx/Bento/blob/develop/LICENSE.md)
+
 ## Description
 Bento is a toolset for Houdini.
 
@@ -14,6 +17,7 @@ Bento is a toolset for Houdini.
 * [Cache Dependency](docs/cacheDependency.md)
 * [Creat Delayed Load Procedural](docs/create-dlp.md)
 * [Color Nodes](docs/color-nodes.md)
+* [Cam Switcher](docs/camSwitcher.md)
 
 ### Python Panel
 

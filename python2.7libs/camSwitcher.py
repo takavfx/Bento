@@ -28,7 +28,7 @@ class CamSwitcherGUI(QtWidgets.QWidget):
 
 
     _windowName   = 'camSwticher'
-    _windowTitle  = 'Cam Switcher ' + __version__
+    _windowTitle  = 'Cam Switcher'
     _windowWidth  = 260
     _windowHeight = 400
 

@@ -122,7 +122,7 @@ class CamSwitcherGUI(QtWidgets.QWidget):
         listview = self.sender()
         currentItem = listview.selectedIndexes()
 
-        tabs = hou.ui.paneTabs()
+        tabs = hou.ui.currentPaneTabs()
 
         for tab in tabs:
             if tab.isCurrentTab():

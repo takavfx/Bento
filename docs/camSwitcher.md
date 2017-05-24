@@ -1,4 +1,4 @@
-# Cam Switcehr
+# Cam Switcher
 
 ![](img/ss_cam_switcher_0001.png)
 

@@ -6,15 +6,11 @@ Managing cache tool.
 """
 #-------------------------------------------------------------------------------
 
-__version__ = 'v1.1.0'
+__version__ = 'v1.1.1'
 
 #-------------------------------------------------------------------------------
 
 import os, sys
-sys.dont_write_bytecode = True
-
-from functools import partial
-
 
 from hutil.Qt import QtWidgets
 from hutil.Qt import QtGui
@@ -131,10 +127,7 @@ class CamSwitcherGUI(QtWidgets.QWidget):
                         tab.viewports()[-1].setCamera(hou.node(currentItem[0].data()))
                     except:
                         pass
-
-
-    def closeEvent(self, event):
-        self.setParent(None)
+                        
 
 
 class camListModel(QtCore.QAbstractListModel):

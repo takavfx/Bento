@@ -39,7 +39,7 @@ class CamSwitcherGUI(QtWidgets.QWidget):
 
 
     def initUI(self):
-
+        self.setProperty("houdiniStyle", True)
         self.setWindowTitle(self._windowTitle)
 
         # Create Camera List Layout > self.createCamListLayout

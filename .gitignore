@@ -32,6 +32,9 @@
 !VERSION
 !ChangeLog
 
+# Ignore Specific directories
+*.vscode
+
 # Ignore Specific File Types
 *.pyc
 *.DS_Store

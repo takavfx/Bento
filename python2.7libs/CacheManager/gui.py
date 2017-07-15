@@ -51,6 +51,7 @@ class CacheManager(QWidget):
 
 
     def initGUI(self):
+        self.setProperty("houdiniStyle", True)
 
         layout = QVBoxLayout()
 

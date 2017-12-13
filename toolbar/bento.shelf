@@ -13,24 +13,24 @@
   </toolshelf>
 
   <tool name="bento_createDlp" label="cDLP" icon="OBJ_geo">
-    <script scriptType="python"><![CDATA[import createDlp
+    <script scriptType="python"><![CDATA[from Bento import createDlp
 createDlp.main()]]></script>
   </tool>
 
   <tool name="bento_createCacheDendency" label="cCDP" icon="SOP_file">
-    <script scriptType="python"><![CDATA[import cacheDependency
+    <script scriptType="python"><![CDATA[from Bento import cacheDependency
 cacheDependency.main()
 
 ]]></script>
   </tool>
 
   <tool name="bento_colorNodes" label="CNodes" icon="COP2_colorwheel">
-    <script scriptType="python"><![CDATA[import colornodes
+    <script scriptType="python"><![CDATA[from Bento import colornodes
 colornodes.run()]]></script>
   </tool>
 
   <tool name="bento_camSwitcher" label="CamS" icon="OBJ_camera">
-    <script scriptType="python"><![CDATA[import camSwitcher
+    <script scriptType="python"><![CDATA[from Bento import camSwitcher
 camSwitcher.main(launch_type='floating')]]></script>
   </tool>
 </shelfDocument>

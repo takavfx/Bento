@@ -6,7 +6,7 @@ This script runs when Houdini nodes are created.
 """
 #-------------------------------------------------------------------------------
 
-import colornodes
+from Bento import colornodes
 
 # Node type information.
 node = kwargs["node"]

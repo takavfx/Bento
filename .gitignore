@@ -34,6 +34,7 @@
 
 # Ignore Specific directories
 *.vscode
+*.vscode/*
 
 # Ignore Specific File Types
 *.pyc

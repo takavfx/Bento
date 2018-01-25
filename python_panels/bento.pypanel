@@ -5,8 +5,8 @@
  used by the application.  Note, that two definitions of the
  same interface or of the interfaces menu are not allowed
  in a single file. -->
-  <interface name="cacheManager" label="Cache Manager" icon="MISC_python" help_url="">
-    <script><![CDATA[from Bento import CacheManager.gui as CM
+  <interface name="cacheManager" label="Cache Manager" icon="SOP_file" help_url="">
+    <script><![CDATA[from Bento.CacheManager import gui as CM
 reload(CM)
 
 def createInterface():
